@@ -1,0 +1,25 @@
+{
+  "name": "planetcnc-expression",
+  "displayName": "PlanetCNC Expression",
+  "description": "Support for Planet CNC Expr.txt files",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "planetcncexpr",
+      "aliases": ["PlanetCNC Expression", "planetcncexpr"],
+      "extensions": [".txt"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "planetcncexpr",
+      "scopeName": "source.expression",
+      "path": "./syntaxes/planetcncexpr.tmLanguage.json"
+    }]
+  }
+}

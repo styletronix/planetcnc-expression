@@ -1,0 +1,142 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "PlanetCNC Expression",
+	"scopeName": "source.expression",
+	"patterns": [
+		{
+			"include": "#sections"
+		},
+		{
+			"include": "#comments"
+		}
+	],
+	"repository": {
+		"sections": {
+			"patterns": [
+				{
+					"name": "entity.name.namespace",
+					"begin": "(?:^\\s*)#(Loop|Loop5|Loop15|Loop60|Loop300|OnInit|OnShutdown|OnStart|OnEnd||OnPause|OnStop|OnEStop|OnJog|OnWheel|OnCmd)\\s*$",
+					"end": "^\\s*(?=#|\\z)", 
+					"patterns": [
+						{
+							"include": "#any-nested"
+						}
+					]
+				},
+				{
+					"name": "entity.name.function",
+					"begin": "^\\s*(#\\w+)\\b\\s*$",
+					"end": "^\\s*(?=#|\\z)",
+					"patterns": [
+						{
+							"include": "#any-nested"
+						}
+					]
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line",
+					"match": ".$"
+				}
+			]
+		},
+		"functions": {
+			"name": "entity.name",
+			"patterns": [
+				{
+					"name": "entity.name.function",
+					"begin": "(?i)\\b(if|for|exec|return|exists|notexists|isnum|nop|def|defnz|abs|sqrt|sqr|sin|cos|tan|asin|acos|atan|atan2|rad2deg|deg2rad|pow|exp|exp10|exp2|log|log10|log2|rand|inc|dec|min|max|round|roundup|floor|ceil|trunc|center|centerex|hex|bin|chr|sleep|datetime|year|month|day|hour|minute|second|millisec|rgb2hue|rgb2sat|rgb2lum|rubik|url|sha256|sha256_f|md5|md5_f|crc16|crc32|debug|print|clear|status|msg|beep|siren|sound_load|sound_unload|sound_play|sound_stop|sound_isplaying|towork|toworkxy|toworkuv|tomachine|tomachinexy|tomachineuv|mmtounit|unittomm|mmtosetunit|setunittomm|setunit|getparam|setparam|remparam|cmd|cmdlist|startfn|startcode|py|pythr|estop|start|stop|pause|out|outpwm|extout1|extout2|jog|usb|midi_noteOn|midi_noteOff|midi_ctrl|midi_prog|midiin_channel|midiin_prog|midiin_note|midiin_ctrl|pk_digital|pk_analog|cam_grab|cam_color|cam_rect|buffer_new|buffer_delete|buffer_printstring|buffer_printdata|buffer_setstring|buffer_setdata|buffer_setdata16|buffer_setdata32|buffer_crc16|buffer_crc32|serial_list|serial_info|serial_open|serial_config|serial_close|serial_write|serial_writedata|serial_writebuffer|serial_read|serial_readdata|serial_readbuffer|not|and|or|xor|nand|nor|xnor|shl|shr|lnot|land|lor|lxor|lnand|lnor|lxnor|eq|ne|gt|lt|ge|le)\\b\\s*\\(",
+					"end": "\\s*\\)",
+					"patterns": [
+						{
+							"include": "#functions"
+						},
+						{
+							"include": "#operators"
+						},
+						{
+							"include": "#numeric"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#variables"
+						}
+					]
+				}
+			]
+		},
+		"any-nested": {
+			"patterns": [
+				{
+					"include": "#functions"
+				},
+				{
+					"include": "#operators"
+				},
+				{
+					"include": "#numeric"
+				},
+				{
+					"include": "#strings"
+				},
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#variables"
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator",
+					"match": "(-|!|~|\\+|-|\\*|\\/|%|\\^|\\=|>|>=|<|<=|==|!=|\\&\\&|\\|\\|\\^\\^|&|\\||<<|>>)"
+				}
+			]
+		},
+		"numeric": {
+			"patterns": [
+				{
+					"name": "constant.numeric",
+					"match": "(?i)\\b(nan|pi|e)\\b"
+				},
+				{
+					"name": "constant.numeric",
+					"match": "[+|-]?[0-9]?\\.?[0-9]+"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.single",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape",
+					"match": "[^']*"
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.name",
+					"match": "(?i)_(\\w|_)+"
+				},
+				{
+					"name": "variable.name",
+					"match": "(?i)(\\w|_)+"
+				}
+			]
+		}
+	}
+}
