@@ -39,7 +39,7 @@
 			"patterns": [
 				{
 					"name": "comment.line",
-					"match": ".$"
+					"match": ";.+$"
 				}
 			]
 		},
