@@ -15,7 +15,7 @@
 			"patterns": [
 				{
 					"name": "entity.name.namespace",
-					"begin": "(?:^\\s*)#(Loop|Loop5|Loop15|Loop60|Loop300|OnInit|OnShutdown|OnStart|OnEnd||OnPause|OnStop|OnEStop|OnJog|OnWheel|OnCmd)\\s*$",
+					"begin": "(?:^\\s*)#(Loop|Loop5|Loop15|Loop60|Loop300|OnInit|OnShutdown|OnStart|OnEnd|OnPause|OnStop|OnEStop|OnJog|OnWheel|OnCmd)\\s*$",
 					"end": "^\\s*(?=#|\\z)", 
 					"patterns": [
 						{

@@ -1,0 +1,923 @@
+{
+    "sections": [
+        {
+            "name": "#Loop",
+            "insertText": "#Loop\n",
+            "documentation": "This section is executed aprox. every 83ms."
+        },
+        {
+            "name": "#Loop5",
+            "insertText": "#Loop5\n",
+            "documentation": "This section is executed every 5 Seconds."
+        },
+        {
+            "name": "#Loop15",
+            "insertText": "#Loop15\n",
+            "documentation": "This section is executed every 15 Seconds."
+        },
+        {
+            "name": "#Loop60",
+            "insertText": "#Loop60\n",
+            "documentation": "This section is executed every 60 Seconds."
+        },
+        {
+            "name": "#Loop300",
+            "insertText": "#Loop300\n",
+            "documentation": "This section is executed every 300 Seconds."
+        },
+        {
+            "name": "#OnInit",
+            "insertText": "#OnInit\n",
+            "documentation": "This section is executed once on start of software."
+        },
+        {
+            "name": "#OnShutdown",
+            "insertText": "#OnShutdown\n",
+            "documentation": "This section is executed on shutdown of software."
+        },
+        {
+            "name": "#OnStart",
+            "insertText": "#OnStart\n",
+            "documentation": "This section is executed on Program start."
+        },
+        {
+            "name": "#OnEnd",
+            "insertText": "#OnEnd\n",
+            "documentation": "This section is executed on Program end."
+        },
+        {
+            "name": "#OnPause",
+            "insertText": "#OnPause\n",
+            "documentation": "This section is executed on Machine Pause."
+        },
+        {
+            "name": "#OnStop",
+            "insertText": "#OnStop\n",
+            "documentation": "This section is executed on Machine Stop / Program End."
+        },
+        {
+            "name": "#OnEStop",
+            "insertText": "#OnEStop\n",
+            "documentation": "This section is executed on Machine E-Stop."
+        },
+        {
+            "name": "#OnJog",
+            "insertText": "#OnJog\n",
+            "documentation": "This section is executed if Jogging is used."
+        },
+        {
+            "name": "#OnWheel",
+            "insertText": "#OnWheel\n",
+            "documentation": "This section is executed if Handwheel is used."
+        },
+        {
+            "name": "#OnCmd",
+            "insertText": "#OnCmd\n",
+            "documentation": "This section is executed if a command is triggered."
+        }
+    ],
+    "functions": [
+        {
+            "name": "if",
+            "detail": "if(1, print(\"Yes\")) ",
+            "documentation": "Conditional statement"
+        },
+        {
+            "name": "for",
+            "detail": "for(i=0, i<10, i=i+1, print(\"Loop\", i)) ",
+            "documentation": "For statement"
+        },
+        {
+            "name": "exec",
+            "detail": "exec(print(\"One\"), msg(\"Two\")) ",
+            "documentation": "Executes multiple expressions"
+        },
+        {
+            "name": "return",
+            "detail": " ",
+            "documentation": "Returns from execution"
+        },
+        {
+            "name": "exists",
+            "detail": "exists(_param) = 0",
+            "documentation": "Checks if value exists"
+        },
+        {
+            "name": "notexists",
+            "detail": "notexists(_param) = 1 ",
+            "documentation": "Checks if value does not exists"
+        },
+        {
+            "name": "isnum",
+            "detail": " ",
+            "documentation": "Checks if value is valid number"
+        },
+        {
+            "name": "nop",
+            "detail": "nop() = 0",
+            "documentation": "No operation (returns zero)"
+        },
+        {
+            "name": "nan",
+            "detail": "nan() = nan",
+            "documentation": "NaN value"
+        },
+        {
+            "name": "def",
+            "detail": "def(nan(), 100) = 100 ",
+            "documentation": "Sets default value"
+        },
+        {
+            "name": "defnz",
+            "detail": "defnz(0, 100) = 100",
+            "documentation": "Sets default value not zero"
+        },
+        {
+            "name": "abs",
+            "detail": "abs(-123) = 123",
+            "documentation": "Absolute value"
+        },
+        {
+            "name": "sqrt",
+            "detail": "sqrt(9) = 3",
+            "documentation": "Square Root"
+        },
+        {
+            "name": "sqr",
+            "detail": "sqr(3) = 9",
+            "documentation": "Square"
+        },
+        {
+            "name": "sin",
+            "detail": "sin(0.524) = 0.500347",
+            "documentation": "Sine"
+        },
+        {
+            "name": "cos",
+            "detail": "cos(1.047) = 0.500171",
+            "documentation": "Cosine"
+        },
+        {
+            "name": "tan",
+            "detail": "tan(0.785) = 0.999204",
+            "documentation": "Tangent"
+        },
+        {
+            "name": "asin",
+            "detail": "asin(0.5) = 0.523599",
+            "documentation": "Inverse sine"
+        },
+        {
+            "name": "acos",
+            "detail": "acos(0.5) = 1.047198",
+            "documentation": "Inverse cosine"
+        },
+        {
+            "name": "atan",
+            "detail": "atan(1) = 0.785398",
+            "documentation": "Inverse tangent"
+        },
+        {
+            "name": "atan2",
+            "detail": "atan2(1,1) = 0.785398",
+            "documentation": "Four quadrant inverse tangent"
+        },
+        {
+            "name": "pi",
+            "detail": "pi() = 3.141593",
+            "documentation": "Pi constant value"
+        },
+        {
+            "name": "rad2deg",
+            "detail": "rad2deg(3.141) = 179.966043",
+            "documentation": "Radians to degrees"
+        },
+        {
+            "name": "deg2rad",
+            "detail": "deg2rad(180) = 3.141593",
+            "documentation": "Degrees to radians"
+        },
+        {
+            "name": "e",
+            "detail": "e() = 2.718282",
+            "documentation": "e constant value"
+        },
+        {
+            "name": "pow",
+            "detail": "pow(2,3) = 8",
+            "documentation": "Power"
+        },
+        {
+            "name": "exp",
+            "detail": "exp(2) = 7.389056",
+            "documentation": "e raised to the given power"
+        },
+        {
+            "name": "exp10",
+            "detail": "exp10(2) = 100",
+            "documentation": "10 raised to the given power"
+        },
+        {
+            "name": "exp2",
+            "detail": "exp2(2) = 4",
+            "documentation": "2 raised to the given power"
+        },
+        {
+            "name": "log",
+            "detail": "log(2) = 0.693147",
+            "documentation": "Base e logarithm"
+        },
+        {
+            "name": "log10",
+            "detail": "log10(2) = 0.301030",
+            "documentation": "Base 10 logarithm"
+        },
+        {
+            "name": "log2",
+            "detail": "log2(2) = 1",
+            "documentation": "Base 2 logarithm"
+        },
+        {
+            "name": "rand",
+            "detail": "rand() = 0.100845",
+            "documentation": "random value"
+        },
+        {
+            "name": "inc",
+            "detail": "inc(5,10,0) = 6",
+            "documentation": "Increases value (value,limit,default)"
+        },
+        {
+            "name": "dec",
+            "detail": "dec(5,0,10) = 4",
+            "documentation": "Decreases value (value,limit,default)"
+        },
+        {
+            "name": "min",
+            "detail": "min(4,6) = 4",
+            "documentation": "Minimum"
+        },
+        {
+            "name": "max",
+            "detail": "max(4,6) = 6",
+            "documentation": "Maximum"
+        },
+        {
+            "name": "round",
+            "detail": "round(0.56) = 1",
+            "documentation": "Round to nearest integer"
+        },
+        {
+            "name": "roundup",
+            "detail": " ",
+            "documentation": "Round up or down to nearest integer"
+        },
+        {
+            "name": "floor",
+            "detail": "floor(0.56) = 0",
+            "documentation": "Round down to nearest value"
+        },
+        {
+            "name": "ceil",
+            "detail": "ceil(0.56) = 1",
+            "documentation": "Round up to integer"
+        },
+        {
+            "name": "trunc",
+            "detail": "trunc(0.56) = 0",
+            "documentation": "Truncate to integer"
+        },
+        {
+            "name": "center",
+            "detail": "center(0.3,0.2) = 0.2 ",
+            "documentation": "Compensate hysteresis"
+        },
+        {
+            "name": "centerex",
+            "detail": "centerex(0.3,0.2,1.0,0.8) = 0.044955 ",
+            "documentation": "Compensate hysteresis"
+        },
+        {
+            "name": "not",
+            "detail": "not(10) = 4294967285",
+            "documentation": "Bitwise complement"
+        },
+        {
+            "name": "and",
+            "detail": "and(10,3) = 2",
+            "documentation": "Bitwise AND"
+        },
+        {
+            "name": "or",
+            "detail": "or(10,3) = 11",
+            "documentation": "Bitwise non-exclusive OR"
+        },
+        {
+            "name": "xor",
+            "detail": "xor(10,3) = 9",
+            "documentation": "Bitwise exclusive OR"
+        },
+        {
+            "name": "nand",
+            "detail": "nand(10,3) = 4294967293",
+            "documentation": "Bitwise NAND"
+        },
+        {
+            "name": "nor",
+            "detail": "nor(10,3) = 4294967284",
+            "documentation": "Bitwise non-exclusive NOR"
+        },
+        {
+            "name": "xnor",
+            "detail": "xnor(10,3) = 4294967286",
+            "documentation": "Bitwise exclusive NOR"
+        },
+        {
+            "name": "shl",
+            "detail": "shl(10,2) = 40",
+            "documentation": "Bitwise shift left"
+        },
+        {
+            "name": "shr",
+            "detail": "shr(10,2) = 2",
+            "documentation": "Bitwise shift right"
+        },
+        {
+            "name": "lnot",
+            "detail": "lnot(1) = 0 ",
+            "documentation": "Logic complement"
+        },
+        {
+            "name": "land",
+            "detail": "land(1,0) = 0 ",
+            "documentation": "Logic AND"
+        },
+        {
+            "name": "lor",
+            "detail": "lor(1,0) = 1 ",
+            "documentation": "Logic non-exclusive OR"
+        },
+        {
+            "name": "lxor",
+            "detail": "lxor(1,0) = 1 ",
+            "documentation": "Logic exclusive OR"
+        },
+        {
+            "name": "lnand",
+            "detail": "lnand(1,0) = 1 ",
+            "documentation": "Logic NAND"
+        },
+        {
+            "name": "lnor",
+            "detail": "lnor(1,0) = 0 ",
+            "documentation": "Logic non-exclusive NOR"
+        },
+        {
+            "name": "lxnor",
+            "detail": "lxnor(1,0) = 0 ",
+            "documentation": "Logic exclusive NOR"
+        },
+        {
+            "name": "eq",
+            "detail": "eq(10,20)  = 0",
+            "documentation": "Relational equality"
+        },
+        {
+            "name": "ne",
+            "detail": "ne(10,20)  = 1",
+            "documentation": "Relational inequality"
+        },
+        {
+            "name": "gt",
+            "detail": "gt(10,20)  = 0",
+            "documentation": "Relational strictly greater than"
+        },
+        {
+            "name": "lt",
+            "detail": "lt(10,20)  = 1",
+            "documentation": "Relational strictly less than"
+        },
+        {
+            "name": "ge",
+            "detail": "ge(10,20)  = 0",
+            "documentation": "Relational greater than or equal to"
+        },
+        {
+            "name": "le",
+            "detail": "le(10,20)  = 1",
+            "documentation": "Relational less than or equal to"
+        },
+        {
+            "name": "hex",
+            "detail": "hex(\"7E5\")  = 2021",
+            "documentation": "Converts string to number"
+        },
+        {
+            "name": "bin",
+            "detail": "bin(\"11111100101\")  = 2021",
+            "documentation": "Converts string to number"
+        },
+        {
+            "name": "chr",
+            "detail": "chr(\"A\")  = 65",
+            "documentation": "Converts string to number"
+        },
+        {
+            "name": "sleep",
+            "detail": "sleep(100)  ",
+            "documentation": "Sleeps n milliseconds"
+        },
+        {
+            "name": "datetime",
+            "detail": "datetime()  = 1616502112.792",
+            "documentation": "Current time (seconds since 1970)"
+        },
+        {
+            "name": "year",
+            "detail": "year(1616502112.792)  = 2021",
+            "documentation": "Year from DateTime value"
+        },
+        {
+            "name": "month",
+            "detail": "month(1616502112.792)  = 3",
+            "documentation": "Month from DateTime value"
+        },
+        {
+            "name": "day",
+            "detail": "day(1616502112.792)  = 23",
+            "documentation": "Day from DateTime value"
+        },
+        {
+            "name": "hour",
+            "detail": "hour(1616502112.792)  = 13",
+            "documentation": "Hour from DateTime value"
+        },
+        {
+            "name": "minute",
+            "detail": "minute(1616502112.792)  = 21",
+            "documentation": "Minute from DateTime value"
+        },
+        {
+            "name": "second",
+            "detail": "second(1616502112.792)  = 52",
+            "documentation": "Second from DateTime value"
+        },
+        {
+            "name": "millisec",
+            "detail": "millisec(1616502112.792)= 792  ",
+            "documentation": "Millisecond from DateTime value"
+        },
+        {
+            "name": "rgb2hue",
+            "detail": "rgb2hue(11484891) = 283.18470955  ",
+            "documentation": "Converts RGB color to hue"
+        },
+        {
+            "name": "rgb2sat",
+            "detail": "rgb2sat(11484891) = 71.68949842  ",
+            "documentation": "Converts RGB color to saturation"
+        },
+        {
+            "name": "rgb2lum",
+            "detail": "rgb2lum(11484891) = 85.88235378  ",
+            "documentation": "Converts RGB color to luminence"
+        },
+        {
+            "name": "rubik",
+            "detail": "Usage:  ",
+            "documentation": "Solves Rubik Cube"
+        },
+        {
+            "name": "url",
+            "detail": "url(\"http://www.planet-cnc.com/\")",
+            "documentation": "Downloads from internet"
+        },
+        {
+            "name": "sha256",
+            "detail": "sha256(\"PlanetCNC\")",
+            "documentation": "Calculates SHA256 from string"
+        },
+        {
+            "name": "sha256_f",
+            "detail":"sha256_f(\"c:\\myfile.txt\")",
+            "documentation": "Calculates SHA256 from file"
+        },
+        {
+            "name": "md5",
+            "detail": "md5(\"PlanetCNC\")",
+            "documentation": "Calculates MD5 from string"
+        },
+        {
+            "name": "md5_f",
+            "detail":"md5_f(\"c:\\myfile.txt\")",
+            "documentation": "Calculates MD5 from file"
+        },
+        {
+            "name": "crc16",
+            "detail": "crc16(\"PlanetCNC\")",
+            "documentation": "Calculates CRC16 from string"
+        },
+        {
+            "name": "crc32",
+            "detail": "crc32(\"PlanetCNC\")",
+            "documentation": "Calculates CRC32 from string"
+        },
+        {
+            "name": "debug",
+            "detail": "debug(\"This is text\")",
+            "documentation": "Prints to output window if debug==true"
+        },
+        {
+            "name": "print",
+            "detail": "print(\"This is text\")",
+            "documentation": "Prints to output window"
+        },
+        {
+            "name": "clear",
+            "detail": "clear()",
+            "documentation": "Clears output window"
+        },
+        {
+            "name": "status",
+            "detail": "status(\"This is text\")",
+            "documentation": "Prints to status window"
+        },
+        {
+            "name": "msg",
+            "detail": "msg(\"This is text\")",
+            "documentation": "Shows dialog"
+        },
+        {
+            "name": "beep",
+            "detail": "beep(440, 0.5, 1)",
+            "documentation": "Plays beep sound"
+        },
+        {
+            "name": "siren",
+            "detail": "siren(440, 10, 1)",
+            "documentation": "Plays siren sound"
+        },
+        {
+            "name": "sound_load",
+            "detail":"sound_load(0, \"c:\\mysound.mp3\")",
+            "documentation": "Loads mp3/wav to sound player"
+        },
+        {
+            "name": "sound_unload",
+            "detail": "sound_unload(0)",
+            "documentation": "Unloads mp3/wav from sound player"
+        },
+        {
+            "name": "sound_play",
+            "detail": "sound_play(0)",
+            "documentation": "Starts sound player"
+        },
+        {
+            "name": "sound_stop",
+            "detail": "sound_stop(0)",
+            "documentation": "Stops sound player"
+        },
+        {
+            "name": "towork",
+            "detail": "towork(100,0) = 90",
+            "documentation": "Converts machine coordinate to work"
+        },
+        {
+            "name": "toworkxy",
+            "detail": "towork(100,50,0)",
+            "documentation": "Converts machine coordinate to work"
+        },
+        {
+            "name": "toworkuv",
+            "detail": "towork(100,50,0)",
+            "documentation": "Converts machine coordinate to work"
+        },
+        {
+            "name": "tomachine",
+            "detail": "tomachine(90,0) = 100",
+            "documentation": "Converts work coordinate to machine"
+        },
+        {
+            "name": "tomachinexy",
+            "detail": "tomachine(90,45,0)",
+            "documentation": "Converts work coordinate to machine"
+        },
+        {
+            "name": "tomachineuv",
+            "detail": "tomachine(90,45,0)",
+            "documentation": "Converts work coordinate to machine"
+        },
+        {
+            "name": "mmtounit",
+            "detail": "mmtounit(1) = 0.03937",
+            "documentation": "Converts MM to g-code units"
+        },
+        {
+            "name": "unittomm",
+            "detail": "unittomm(1) = 25.4",
+            "documentation": "Converts g-code units to MM"
+        },
+        {
+            "name": "mmtosetunit",
+            "detail": "mmtosetunit(1) = 0.03937",
+            "documentation": "Converts MM to settings units"
+        },
+        {
+            "name": "setunittomm",
+            "detail": "setunittomm(1) = 25.4",
+            "documentation": "Converts settings units to MM"
+        },
+        {
+            "name": "setunit",
+            "detail": "setunit(25.4,1) = 25.4",
+            "documentation": "Chooses value based on settings units"
+        },
+        {
+            "name": "getparam",
+            "detail": "getparam('_machine_x') = 123",
+            "documentation": "Gets parameter"
+        },
+        {
+            "name": "setparam",
+            "detail": "setparam('_param', 123) = 123",
+            "documentation": "Sets parameter"
+        },
+        {
+            "name": "remparam",
+            "detail": "",
+            "documentation": "Removes parameter"
+        },
+        {
+            "name": "cmd",
+            "detail": "",
+            "documentation": "Executes 'cmd' command"
+        },
+        {
+            "name": "cmdlist",
+            "detail": "",
+            "documentation": "Prints all 'cmd' commands"
+        },
+        {
+            "name": "startfn",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "startcode",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "py",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "pythr",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "estop",
+            "detail": "",
+            "documentation": "E-Stops machine"
+        },
+        {
+            "name": "start",
+            "detail": "",
+            "documentation": "Starts machine"
+        },
+        {
+            "name": "stop",
+            "detail": "",
+            "documentation": "Stops machine"
+        },
+        {
+            "name": "pause",
+            "detail": "",
+            "documentation": "Pause machine"
+        },
+        {
+            "name": "out",
+            "detail": "",
+            "documentation": "Turns output pin on/off"
+        },
+        {
+            "name": "outpwm",
+            "detail": "",
+            "documentation": "Turns pwm pin on/off"
+        },
+        {
+            "name": "extout1",
+            "detail": "",
+            "documentation": "Turns ext1 pin on/off"
+        },
+        {
+            "name": "extout2",
+            "detail": "",
+            "documentation": "Turns ext2 pin on/off"
+        },
+        {
+            "name": "jog",
+            "detail": "",
+            "documentation": "Jog machine"
+        },
+        {
+            "name": "usb",
+            "detail": "",
+            "documentation": "Send USB comand"
+        },
+        {
+            "name": "midi_noteOn",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "midi_noteOff",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "midi_ctrl",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "midi_prog",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "midiin_prog",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "midiin_note",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "midiin_ctrl",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "pk_digital",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "pk_analog",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "cam_grab",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "cam_color",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "cam_rect",
+            "detail": "",
+            "documentation": "no description"
+        },
+        {
+            "name": "buffer_new"
+        },
+        {
+            "name": "buffer_delete"
+        },
+        {
+            "name": "buffer_printstring"
+        },
+        {
+            "name": "buffer_printdata"
+        },
+        {
+            "name": "buffer_setstring"
+        },
+        {
+            "name": "buffer_setdata"
+        },
+        {
+            "name": "buffer_setdata16"
+        },
+        {
+            "name": "buffer_setdata32"
+        },
+        {
+            "name": "buffer_crc16"
+        },
+        {
+            "name": "buffer_crc32"
+        },
+        {
+            "name": "serial_list"
+        },
+        {
+            "name": "serial_info"
+        },
+        {
+            "name": "serial_open"
+        },
+        {
+            "name": "serial_config"
+        },
+        {
+            "name": "serial_close"
+        },
+        {
+            "name": "serial_write"
+        },
+        {
+            "name": "serial_writedata"
+        },
+        {
+            "name": "serial_writebuffer"
+        },
+        {
+            "name": "serial_read"
+        },
+        {
+            "name": "serial_readdata"
+        },
+        {
+            "name": "serial_readbuffer"
+        },
+        {
+            "name": "not"
+        },
+        {
+            "name": "and"
+        },
+        {
+            "name": "or"
+        },
+        {
+            "name": "xor"
+        },
+        {
+            "name": "nand"
+        },
+        {
+            "name": "nor"
+        },
+        {
+            "name": "xnor"
+        },
+        {
+            "name": "shl"
+        },
+        {
+            "name": "shr"
+        },
+        {
+            "name": "lnot"
+        },
+        {
+            "name": "land"
+        },
+        {
+            "name": "lor"
+        },
+        {
+            "name": "lxor"
+        },
+        {
+            "name": "lnand"
+        },
+        {
+            "name": "lnor"
+        },
+        {
+            "name": "lxnor"
+        },
+        {
+            "name": "eq"
+        },
+        {
+            "name": "ne"
+        },
+        {
+            "name": "gt"
+        },
+        {
+            "name": "lt"
+        },
+        {
+            "name": "ge"
+        },
+        {
+            "name": "le"
+        }
+    ],
+    "operators": [
+
+    ]
+}

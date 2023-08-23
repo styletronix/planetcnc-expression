@@ -2,7 +2,7 @@
   "name": "planetcnc-expression",
   "displayName": "PlanetCNC Expression",
   "description": "Support for Planet CNC Expr.txt files",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "styletronix.net",
   "private": true,
   "license": "MIT",
@@ -10,27 +10,54 @@
     "vscode": "^1.81.0"
   },
   "categories": [
-    "Programming Languages"
+    "Other"
   ],
-"activationEvents": [
-  "onLanguage:planetcncexpr"
-],
+  "activationEvents": [
+    "onLanguage:planetcncexpr"
+  ],
   "main": "./extension.js",
-  "devDependencies": {
-    "@types/node": "^16.18.34",
-    "@types/vscode": "^1.73.0"
-  },
   "contributes": {
-    "languages": [{
-      "id": "planetcncexpr",
-      "aliases": ["PlanetCNC Expression", "planetcncexpr"],
-      "extensions": [".txt"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "planetcncexpr",
-      "scopeName": "source.expression",
-      "path": "./syntaxes/planetcncexpr.tmLanguage.json"
-    }]
+    "commands": [
+      {
+        "command": "planetcnc-expression.update",
+        "title": "PlanetCNC: Download new language data"
+      }
+    ],
+    "languages": [
+      {
+        "id": "planetcncexpr",
+        "aliases": [
+          "PlanetCNC Expression",
+          "planetcncexpr"
+        ],
+        "extensions": [
+          ".txt"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "planetcncexpr",
+        "scopeName": "source.expression",
+        "path": "./syntaxes/planetcncexpr.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.81.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.2.5",
+    "eslint": "^8.41.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.3",
+    "@vscode/test-electron": "^2.3.2"
   }
 }

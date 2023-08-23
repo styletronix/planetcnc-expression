@@ -3,7 +3,7 @@
     "tasks": [
         {
             "type": "shell",
-            "command":"vsce pacakge --allow-missing-repository",
+            "command":"vsce package --allow-missing-repository",
             "problemMatcher": [],
             "label": "vsce: package",
             "group": {
