@@ -1,8 +1,8 @@
 {
   "name": "planetcnc-expression",
   "displayName": "PlanetCNC Expression",
-  "description": "Support for Planet CNC Expr.txt files",
-  "version": "0.0.3",
+  "description": "Syntax highlighting and autocomplete for Planet CNC files",
+  "version": "0.0.4",
   "publisher": "styletronix.net",
   "private": true,
   "license": "MIT",
@@ -13,7 +13,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:planetcncexpr"
+    "onLanguage:planetcncexpr",
+    "onLanguage:planetcncgcode"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -32,11 +33,24 @@
         ],
         "extensions": [
           ".txt"
+        ]
+      },{
+        "id": "planetcncgcode",
+        "aliases": [
+          "PlanetCNC GCode",
+          "planetcncgcode"
         ],
-        "configuration": "./language-configuration.json"
+        "extensions": [
+          ".gcode"
+        ]
       }
     ],
     "grammars": [
+      {
+        "language": "planetcncexpr",
+        "scopeName": "source.expression",
+        "path": "./syntaxes/planetcncexpr.tmLanguage.json"
+      },
       {
         "language": "planetcncexpr",
         "scopeName": "source.expression",

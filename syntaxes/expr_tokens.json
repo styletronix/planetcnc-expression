@@ -1,4 +1,18 @@
 {
+    "gcodeFunctions": [
+        {
+            "name": "Expr",
+            "snippet": "EXPR[${1:ExpressionToExecute}]",
+            "detail": "Execute expression",
+            "documentation": "EXPR[MSG('THIS IS TEXT')]\n\n(result in #<_expr> parameter)"
+        },
+        {
+            "name": "Exists",
+            "snippet": "EXISTS[#<${1:ParameterName}>]",
+            "detail": "Check if value exists",
+            "documentation": "EXISTS[#<PARAM>] = 0"
+        }
+    ],
     "sections": [
         {
             "name": "#Loop",
@@ -499,7 +513,7 @@
         },
         {
             "name": "sha256_f",
-            "detail":"sha256_f(\"c:\\myfile.txt\")",
+            "detail": "sha256_f(\"c:\\myfile.txt\")",
             "documentation": "Calculates SHA256 from file"
         },
         {
@@ -509,7 +523,7 @@
         },
         {
             "name": "md5_f",
-            "detail":"md5_f(\"c:\\myfile.txt\")",
+            "detail": "md5_f(\"c:\\myfile.txt\")",
             "documentation": "Calculates MD5 from file"
         },
         {
@@ -559,7 +573,7 @@
         },
         {
             "name": "sound_load",
-            "detail":"sound_load(0, \"c:\\mysound.mp3\")",
+            "detail": "sound_load(0, \"c:\\mysound.mp3\")",
             "documentation": "Loads mp3/wav to sound player"
         },
         {
@@ -918,6 +932,1707 @@
         }
     ],
     "operators": [
-
+        {
+            "name": "+",
+            "detail": "Addition",
+            "documentation": "Usage: 12 + 34 = 46"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "_tool_ismill_num",
+            "snippet": "_tool_ismill_num|${1:number}",
+            "insertText": "_tool_ismill_num"
+        },
+        {
+            "name": "_tool_isdrill_num",
+            "snippet": "_tool_isdrill_num|${1:number}",
+            "insertText": "_tool_isdrill_num"
+        },
+        {
+            "name": "_tool_isturn_num",
+            "snippet": "_tool_isturn_num|${1:number}",
+            "insertText": "_tool_isturn_num"
+        },
+        {
+            "name": "_tool_isprobe_num",
+            "snippet": "_tool_isprobe_num|${1:number}",
+            "insertText": "_tool_isprobe_num"
+        },
+        {
+            "name": "_tool_islaser_num",
+            "snippet": "_tool_islaser_num|${1:number}",
+            "insertText": "_tool_islaser_num"
+        },
+        {
+            "name": "_tool_isother_num",
+            "snippet": "_tool_isother_num|${1:number}",
+            "insertText": "_tool_isother_num"
+        },
+        {
+            "name": "_tool_dia_num",
+            "snippet": "_tool_dia_num|${1:number}",
+            "insertText": "_tool_dia_num"
+        },
+        {
+            "name": "_tool_off_x_num",
+            "snippet": "_tool_off_x_num|${1:number}",
+            "insertText": "_tool_off_x_num"
+        },
+        {
+            "name": "_tool_off_y_num",
+            "snippet": "_tool_off_y_num|${1:number}",
+            "insertText": "_tool_off_y_num"
+        },
+        {
+            "name": "_tool_off_z_num",
+            "snippet": "_tool_off_z_num|${1:number}",
+            "insertText": "_tool_off_z_num"
+        },
+        {
+            "name": "_tool_off_a_num",
+            "snippet": "_tool_off_a_num|${1:number}",
+            "insertText": "_tool_off_a_num"
+        },
+        {
+            "name": "_tool_off_b_num",
+            "snippet": "_tool_off_b_num|${1:number}",
+            "insertText": "_tool_off_b_num"
+        },
+        {
+            "name": "_tool_off_c_num",
+            "snippet": "_tool_off_c_num|${1:number}",
+            "insertText": "_tool_off_c_num"
+        },
+        {
+            "name": "_tool_off_u_num",
+            "snippet": "_tool_off_u_num|${1:number}",
+            "insertText": "_tool_off_u_num"
+        },
+        {
+            "name": "_tool_off_v_num",
+            "snippet": "_tool_off_v_num|${1:number}",
+            "insertText": "_tool_off_v_num"
+        },
+        {
+            "name": "_tool_off_w_num",
+            "snippet": "_tool_off_w_num|${1:number}",
+            "insertText": "_tool_off_w_num"
+        },
+        {
+            "name": "_tool_tc_x_num",
+            "snippet": "_tool_tc_x_num|${1:number}",
+            "insertText": "_tool_tc_x_num"
+        },
+        {
+            "name": "_tool_tc_y_num",
+            "snippet": "_tool_tc_y_num|${1:number}",
+            "insertText": "_tool_tc_y_num"
+        },
+        {
+            "name": "_tool_tc_z_num",
+            "snippet": "_tool_tc_z_num|${1:number}",
+            "insertText": "_tool_tc_z_num"
+        },
+        {
+            "name": "_tool_tc_a_num",
+            "snippet": "_tool_tc_a_num|${1:number}",
+            "insertText": "_tool_tc_a_num"
+        },
+        {
+            "name": "_tool_tc_b_num",
+            "snippet": "_tool_tc_b_num|${1:number}",
+            "insertText": "_tool_tc_b_num"
+        },
+        {
+            "name": "_tool_tc_c_num",
+            "snippet": "_tool_tc_c_num|${1:number}",
+            "insertText": "_tool_tc_c_num"
+        },
+        {
+            "name": "_tool_tc_u_num",
+            "snippet": "_tool_tc_u_num|${1:number}",
+            "insertText": "_tool_tc_u_num"
+        },
+        {
+            "name": "_tool_tc_v_num",
+            "snippet": "_tool_tc_v_num|${1:number}",
+            "insertText": "_tool_tc_v_num"
+        },
+        {
+            "name": "_tool_tc_w_num",
+            "snippet": "_tool_tc_w_num|${1:number}",
+            "insertText": "_tool_tc_w_num"
+        },
+        {
+            "name": "_tool_so_x_num",
+            "snippet": "_tool_so_x_num|${1:number}",
+            "insertText": "_tool_so_x_num"
+        },
+        {
+            "name": "_tool_so_y_num",
+            "snippet": "_tool_so_y_num|${1:number}",
+            "insertText": "_tool_so_y_num"
+        },
+        {
+            "name": "_tool_so_z_num",
+            "snippet": "_tool_so_z_num|${1:number}",
+            "insertText": "_tool_so_z_num"
+        },
+        {
+            "name": "_tool_skipmeasure_num",
+            "snippet": "_tool_skipmeasure_num|${1:number}",
+            "insertText": "_tool_skipmeasure_num"
+        },
+        {
+            "name": "_tool_skipchange_num",
+            "snippet": "_tool_skipchange_num|${1:number}",
+            "insertText": "_tool_skipchange_num"
+        },
+        {
+            "name": "_tool_par1_num",
+            "snippet": "_tool_par1_num|${1:number}",
+            "insertText": "_tool_par1_num"
+        },
+        {
+            "name": "_tool_par2_num",
+            "snippet": "_tool_par2_num|${1:number}",
+            "insertText": "_tool_par2_num"
+        },
+        {
+            "name": "_tool_par3_num",
+            "snippet": "_tool_par3_num|${1:number}",
+            "insertText": "_tool_par3_num"
+        },
+        {
+            "name": "_tool_par4_num",
+            "snippet": "_tool_par4_num|${1:number}",
+            "insertText": "_tool_par4_num"
+        },
+        {
+            "name": "_tool_par5_num",
+            "snippet": "_tool_par5_num|${1:number}",
+            "insertText": "_tool_par5_num"
+        },
+        {
+            "name": "_tool_par6_num",
+            "snippet": "_tool_par6_num|${1:number}",
+            "insertText": "_tool_par6_num"
+        },
+        {
+            "name": "_tool_spdfeed_num",
+            "snippet": "_tool_spdfeed_num|${1:number}",
+            "insertText": "_tool_spdfeed_num"
+        },
+        {
+            "name": "_tool_spdfeedz_num",
+            "snippet": "_tool_spdfeedz_num|${1:number}",
+            "insertText": "_tool_spdfeedz_num"
+        },
+        {
+            "name": "_tool_spdspnd_num",
+            "snippet": "_tool_spdspnd_num|${1:number}",
+            "insertText": "_tool_spdspnd_num"
+        },
+        {
+            "name": "_coordsystem_x_num",
+            "snippet": "_coordsystem_x_num|${1:number}",
+            "insertText": "_coordsystem_x_num"
+        },
+        {
+            "name": "_coordsystem_y_num",
+            "snippet": "_coordsystem_y_num|${1:number}",
+            "insertText": "_coordsystem_y_num"
+        },
+        {
+            "name": "_coordsystem_z_num",
+            "snippet": "_coordsystem_z_num|${1:number}",
+            "insertText": "_coordsystem_z_num"
+        },
+        {
+            "name": "_coordsystem_a_num",
+            "snippet": "_coordsystem_a_num|${1:number}",
+            "insertText": "_coordsystem_a_num"
+        },
+        {
+            "name": "_coordsystem_b_num",
+            "snippet": "_coordsystem_b_num|${1:number}",
+            "insertText": "_coordsystem_b_num"
+        },
+        {
+            "name": "_coordsystem_c_num",
+            "snippet": "_coordsystem_c_num|${1:number}",
+            "insertText": "_coordsystem_c_num"
+        },
+        {
+            "name": "_coordsystem_u_num",
+            "snippet": "_coordsystem_u_num|${1:number}",
+            "insertText": "_coordsystem_u_num"
+        },
+        {
+            "name": "_coordsystem_v_num",
+            "snippet": "_coordsystem_v_num|${1:number}",
+            "insertText": "_coordsystem_v_num"
+        },
+        {
+            "name": "_coordsystem_w_num",
+            "snippet": "_coordsystem_w_num|${1:number}",
+            "insertText": "_coordsystem_w_num"
+        },
+        {
+            "name": "_coordsystem_rot_num",
+            "snippet": "_coordsystem_rot_num|${1:number}",
+            "insertText": "_coordsystem_rot_num"
+        },
+        {
+            "name": "_point_x_num",
+            "snippet": "_point_x_num|${1:number}",
+            "insertText": "_point_x_num"
+        },
+        {
+            "name": "_point_y_num",
+            "snippet": "_point_y_num|${1:number}",
+            "insertText": "_point_y_num"
+        },
+        {
+            "name": "_point_z_num",
+            "snippet": "_point_z_num|${1:number}",
+            "insertText": "_point_z_num"
+        },
+        {
+            "name": "_point_a_num",
+            "snippet": "_point_a_num|${1:number}",
+            "insertText": "_point_a_num"
+        },
+        {
+            "name": "_point_b_num",
+            "snippet": "_point_b_num|${1:number}",
+            "insertText": "_point_b_num"
+        },
+        {
+            "name": "_point_c_num",
+            "snippet": "_point_c_num|${1:number}",
+            "insertText": "_point_c_num"
+        },
+        {
+            "name": "_point_u_num",
+            "snippet": "_point_u_num|${1:number}",
+            "insertText": "_point_u_num"
+        },
+        {
+            "name": "_point_v_num",
+            "snippet": "_point_v_num|${1:number}",
+            "insertText": "_point_v_num"
+        },
+        {
+            "name": "_point_w_num",
+            "snippet": "_point_w_num|${1:number}",
+            "insertText": "_point_w_num"
+        },
+        {
+            "name": "_input_num",
+            "snippet": "_input_num|${1:number}",
+            "insertText": "_input_num"
+        },
+        {
+            "name": "_output_num",
+            "snippet": "_output_num|${1:number}",
+            "insertText": "_output_num"
+        },
+        {
+            "name": "_extin1_num",
+            "snippet": "_extin1_num|${1:number}",
+            "insertText": "_extin1_num"
+        },
+        {
+            "name": "_extin2_num",
+            "snippet": "_extin2_num|${1:number}",
+            "insertText": "_extin2_num"
+        },
+        {
+            "name": "_extout1_num",
+            "snippet": "_extout1_num|${1:number}",
+            "insertText": "_extout1_num"
+        },
+        {
+            "name": "_extout2_num",
+            "snippet": "_extout2_num|${1:number}",
+            "insertText": "_extout2_num"
+        },
+        {
+            "name": "_hw_output_num",
+            "snippet": "_hw_output_num|${1:number}",
+            "insertText": "_hw_output_num"
+        },
+        {
+            "name": "_hw_output_freq_num",
+            "snippet": "_hw_output_freq_num|${1:number}",
+            "insertText": "_hw_output_freq_num"
+        },
+        {
+            "name": "_hw_output_duty_num",
+            "snippet": "_hw_output_duty_num|${1:number}",
+            "insertText": "_hw_output_duty_num"
+        },
+        {
+            "name": "_hw_extin1_num",
+            "snippet": "_hw_extin1_num|${1:number}",
+            "insertText": "_hw_extin1_num"
+        },
+        {
+            "name": "_hw_extin2_num",
+            "snippet": "_hw_extin2_num|${1:number}",
+            "insertText": "_hw_extin2_num"
+        },
+        {
+            "name": "_hw_extout1_num",
+            "snippet": "_hw_extout1_num|${1:number}",
+            "insertText": "_hw_extout1_num"
+        },
+        {
+            "name": "_hw_extout2_num",
+            "snippet": "_hw_extout2_num|${1:number}",
+            "insertText": "_hw_extout2_num"
+        },
+        {
+            "name": "_hw_input_num",
+            "snippet": "_hw_input_num|${1:number}",
+            "insertText": "_hw_input_num"
+        },
+        {
+            "name": "_hw_limit_num",
+            "snippet": "_hw_limit_num|${1:number}",
+            "insertText": "_hw_limit_num"
+        },
+        {
+            "name": "_hw_aux_num",
+            "snippet": "_hw_aux_num|${1:number}",
+            "insertText": "_hw_aux_num"
+        }
+    ],
+    "gcodes": [
+        {
+            "name": "G00 - Rapid Move",
+            "insertText": "G00",
+            "detail": "Rapid Move",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g00"
+        },
+        {
+            "name": "G01 - Linear Feed Move",
+            "insertText": "G01",
+            "detail": "Linear Feed Move",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g01"
+        },
+        {
+            "name": "G02 - Clockwise Arc Feed Move",
+            "insertText": "G02",
+            "detail": "Clockwise Arc Feed Move",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g02"
+        },
+        {
+            "name": "G03 - Counter Clockwise Arc Feed Move",
+            "insertText": "G03",
+            "detail": "Counter Clockwise Arc Feed Move",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g03"
+        },
+        {
+            "name": "G04 - Dwell",
+            "insertText": "G04",
+            "detail": "Dwell",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g04"
+        },
+        {
+            "name": "G05 - Cubic Spline",
+            "insertText": "G05",
+            "detail": "Cubic Spline",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g05"
+        },
+        {
+            "name": "G05.1 - Quadratic Spline",
+            "insertText": "G05.1",
+            "detail": "Quadratic Spline",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g05.1"
+        },
+        {
+            "name": "G05.2 - NURBS Block",
+            "insertText": "G05.2",
+            "detail": "NURBS Block",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g05.2"
+        },
+        {
+            "name": "G05.3 - NURBS Block End",
+            "insertText": "G05.3",
+            "detail": "NURBS Block End",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g05.3"
+        },
+        {
+            "name": "G06 - Shapes Exec",
+            "insertText": "G06",
+            "detail": "Shapes Exec",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g06"
+        },
+        {
+            "name": "G06.1 - Shapes Clear",
+            "insertText": "G06.1",
+            "detail": "Shapes Clear",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g06.1"
+        },
+        {
+            "name": "G06.2 - Shapes Load",
+            "insertText": "G06.2",
+            "detail": "Shapes Load",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g06.2"
+        },
+        {
+            "name": "G06.3 - Shapes Process",
+            "insertText": "G06.3",
+            "detail": "Shapes Process",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g06.3"
+        },
+        {
+            "name": "G07 - Lathe Mode - Diameter",
+            "insertText": "G07",
+            "detail": "Lathe Mode - Diameter",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g07"
+        },
+        {
+            "name": "G08 - Lathe Mode - Radius",
+            "insertText": "G08",
+            "detail": "Lathe Mode - Radius",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g08"
+        },
+        {
+            "name": "G09 - Stop, Sync &amp; Set Position",
+            "insertText": "G09",
+            "detail": "Stop, Sync &amp; Set Position",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g09"
+        },
+        {
+            "name": "G10 - Settings",
+            "insertText": "G10",
+            "detail": "Settings",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g10"
+        },
+        {
+            "name": "G12 - Mill: Circular Pocket CW",
+            "insertText": "G12",
+            "detail": "Mill: Circular Pocket CW",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g12"
+        },
+        {
+            "name": "G13 - Mill: Circular Pocket CCW",
+            "insertText": "G13",
+            "detail": "Mill: Circular Pocket CCW",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g13"
+        },
+        {
+            "name": "G15 - Polar Coordinate Cancel",
+            "insertText": "G15",
+            "detail": "Polar Coordinate Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g15"
+        },
+        {
+            "name": "G16 - Polar Coordinate Enable",
+            "insertText": "G16",
+            "detail": "Polar Coordinate Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g16"
+        },
+        {
+            "name": "G17 - XY Plane",
+            "insertText": "G17",
+            "detail": "XY Plane",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g17"
+        },
+        {
+            "name": "G18 - ZX Plane",
+            "insertText": "G18",
+            "detail": "ZX Plane",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g18"
+        },
+        {
+            "name": "G19 - YZ Plane",
+            "insertText": "G19",
+            "detail": "YZ Plane",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g19"
+        },
+        {
+            "name": "G20 - Inch Units",
+            "insertText": "G20",
+            "detail": "Inch Units",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g20"
+        },
+        {
+            "name": "G21 - Millimeter Units",
+            "insertText": "G21",
+            "detail": "Millimeter Units",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g21"
+        },
+        {
+            "name": "G28 - Go To Home",
+            "insertText": "G28",
+            "detail": "Go To Home",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g28"
+        },
+        {
+            "name": "G28.1 - Set Home",
+            "insertText": "G28.1",
+            "detail": "Set Home",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g28.1"
+        },
+        {
+            "name": "G30 - Go To Home",
+            "insertText": "G30",
+            "detail": "Go To Home",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g30"
+        },
+        {
+            "name": "G30.1 - Set Home",
+            "insertText": "G30.1",
+            "detail": "Set Home",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g30.1"
+        },
+        {
+            "name": "G32 - Spindle Synch Motion",
+            "insertText": "G32",
+            "detail": "Spindle Synch Motion",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g32"
+        },
+        {
+            "name": "G33 - Spindle Synch Motion",
+            "insertText": "G33",
+            "detail": "Spindle Synch Motion",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g33"
+        },
+        {
+            "name": "G33.1 - Spindle Synch Motion With Return",
+            "insertText": "G33.1",
+            "detail": "Spindle Synch Motion With Return",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g33.1"
+        },
+        {
+            "name": "G31 - Probe",
+            "insertText": "G31",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g31"
+        },
+        {
+            "name": "G38.1 - Probe",
+            "insertText": "G38.1",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g38.1"
+        },
+        {
+            "name": "G38.2 - Probe",
+            "insertText": "G38.2",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g38.2"
+        },
+        {
+            "name": "G38.3 - Probe",
+            "insertText": "G38.3",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g38.3"
+        },
+        {
+            "name": "G38.4 - Probe",
+            "insertText": "G38.4",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g38.4"
+        },
+        {
+            "name": "G38.5 - Probe",
+            "insertText": "G38.5",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g38.5"
+        },
+        {
+            "name": "G40 - Tool Compensation Cancel",
+            "insertText": "G40",
+            "detail": "Tool Compensation Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g40"
+        },
+        {
+            "name": "G41 - Tool Compensation Left",
+            "insertText": "G41",
+            "detail": "Tool Compensation Left",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g41"
+        },
+        {
+            "name": "G41.1 - Tool Compensation Dynamic Left",
+            "insertText": "G41.1",
+            "detail": "Tool Compensation Dynamic Left",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g41.1"
+        },
+        {
+            "name": "G42 - Tool Compensation Right",
+            "insertText": "G42",
+            "detail": "Tool Compensation Right",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g42"
+        },
+        {
+            "name": "G42.1 - Tool Compensation Dynamic Right",
+            "insertText": "G42.1",
+            "detail": "Tool Compensation Dynamic Right",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g42.1"
+        },
+        {
+            "name": "G43 - Tool Offset+ Enable",
+            "insertText": "G43",
+            "detail": "Tool Offset+ Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g43"
+        },
+        {
+            "name": "G43.1 - Tool Offset+ Enable",
+            "insertText": "G43.1",
+            "detail": "Tool Offset+ Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g43.1"
+        },
+        {
+            "name": "G44 - Tool Offset- Enable",
+            "insertText": "G44",
+            "detail": "Tool Offset- Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g44"
+        },
+        {
+            "name": "G44.1 - Tool Offset- Enable",
+            "insertText": "G44.1",
+            "detail": "Tool Offset- Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g44.1"
+        },
+        {
+            "name": "G49 - Tool Offset Cancel",
+            "insertText": "G49",
+            "detail": "Tool Offset Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g49"
+        },
+        {
+            "name": "G50 - Axes Scale Cancel",
+            "insertText": "G50",
+            "detail": "Axes Scale Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g50"
+        },
+        {
+            "name": "G51 - Axes Scale Enable",
+            "insertText": "G51",
+            "detail": "Axes Scale Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g51"
+        },
+        {
+            "name": "G52 - Axes Offset",
+            "insertText": "G52",
+            "detail": "Axes Offset",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g52"
+        },
+        {
+            "name": "G52.1 - Axes Offset Cancel",
+            "insertText": "G52.1",
+            "detail": "Axes Offset Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g52.1"
+        },
+        {
+            "name": "G53 - Machine Coordinate System",
+            "insertText": "G53",
+            "detail": "Machine Coordinate System",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g53"
+        },
+        {
+            "name": "G54 - Coordinate System 1",
+            "insertText": "G54",
+            "detail": "Coordinate System 1",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g54"
+        },
+        {
+            "name": "G54.1 - Coordinate System P",
+            "insertText": "G54.1",
+            "detail": "Coordinate System P",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g54.1"
+        },
+        {
+            "name": "G55 - Coordinate System 2",
+            "insertText": "G55",
+            "detail": "Coordinate System 2",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g55"
+        },
+        {
+            "name": "G56 - Coordinate System 3",
+            "insertText": "G56",
+            "detail": "Coordinate System 3",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g56"
+        },
+        {
+            "name": "G57 - Coordinate System 4",
+            "insertText": "G57",
+            "detail": "Coordinate System 4",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g57"
+        },
+        {
+            "name": "G58 - Coordinate System 5",
+            "insertText": "G58",
+            "detail": "Coordinate System 5",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g58"
+        },
+        {
+            "name": "G59 - Coordinate System 6 (or P)",
+            "insertText": "G59",
+            "detail": "Coordinate System 6 (or P)",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g59"
+        },
+        {
+            "name": "G59.1 - Coordinate System 7",
+            "insertText": "G59.1",
+            "detail": "Coordinate System 7",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g59.1"
+        },
+        {
+            "name": "G59.2 - Coordinate System 8",
+            "insertText": "G59.2",
+            "detail": "Coordinate System 8",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g59.2"
+        },
+        {
+            "name": "G59.3 - Coordinate System 9",
+            "insertText": "G59.3",
+            "detail": "Coordinate System 9",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g59.3"
+        },
+        {
+            "name": "G61 - Blend Cancel",
+            "insertText": "G61",
+            "detail": "Blend Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g61"
+        },
+        {
+            "name": "G64 - Blend Enable",
+            "insertText": "G64",
+            "detail": "Blend Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g64"
+        },
+        {
+            "name": "G65 - Call Macro",
+            "insertText": "G65",
+            "detail": "Call Macro",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g65"
+        },
+        {
+            "name": "G68 - Axes Rotate Enable",
+            "insertText": "G68",
+            "detail": "Axes Rotate Enable",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g68"
+        },
+        {
+            "name": "G69 - Axes Rotate Cancel",
+            "insertText": "G69",
+            "detail": "Axes Rotate Cancel",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g69"
+        },
+        {
+            "name": "G70 - Inch Units",
+            "insertText": "G70",
+            "detail": "Inch Units",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g70"
+        },
+        {
+            "name": "G71 - Millimeter Units",
+            "insertText": "G71",
+            "detail": "Millimeter Units",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g71"
+        },
+        {
+            "name": "G72 - Mill: Facing",
+            "insertText": "G72",
+            "detail": "Mill: Facing",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g72"
+        },
+        {
+            "name": "G72.1 - Mill: Profile",
+            "insertText": "G72.1",
+            "detail": "Mill: Profile",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g72.1"
+        },
+        {
+            "name": "G72.2 - Mill: Pocket",
+            "insertText": "G72.2",
+            "detail": "Mill: Pocket",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g72.2"
+        },
+        {
+            "name": "G73 - Drill: Drill, Speed Peck, Dwell",
+            "insertText": "G73",
+            "detail": "Drill: Drill, Speed Peck, Dwell",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g73"
+        },
+        {
+            "name": "G74 - Tap: Left",
+            "insertText": "G74",
+            "detail": "Tap: Left",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g74"
+        },
+        {
+            "name": "G75 - Turn: Pattern Repeating",
+            "insertText": "G75",
+            "detail": "Turn: Pattern Repeating",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g75"
+        },
+        {
+            "name": "G76 - Turn: Threading",
+            "insertText": "G76",
+            "detail": "Turn: Threading",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g76"
+        },
+        {
+            "name": "G77 - Turn: Roughing X",
+            "insertText": "G77",
+            "detail": "Turn: Roughing X",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g77"
+        },
+        {
+            "name": "G78 - Turn: Roughing Z",
+            "insertText": "G78",
+            "detail": "Turn: Roughing Z",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g78"
+        },
+        {
+            "name": "G79 - Turn: Grooving",
+            "insertText": "G79",
+            "detail": "Turn: Grooving",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g79"
+        },
+        {
+            "name": "G80 - Cancel Motion",
+            "insertText": "G80",
+            "detail": "Cancel Motion",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g80"
+        },
+        {
+            "name": "G81 - Drill: Drill",
+            "insertText": "G81",
+            "detail": "Drill: Drill",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g81"
+        },
+        {
+            "name": "G82 - Drill: Drill, Dwell",
+            "insertText": "G82",
+            "detail": "Drill: Drill, Dwell",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g82"
+        },
+        {
+            "name": "G83 - Drill: Drill, Peck, Dwell",
+            "insertText": "G83",
+            "detail": "Drill: Drill, Peck, Dwell",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g83"
+        },
+        {
+            "name": "G84 - Tap: Right",
+            "insertText": "G84",
+            "detail": "Tap: Right",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g84"
+        },
+        {
+            "name": "G85 - Bore: Feed In, Feed Out",
+            "insertText": "G85",
+            "detail": "Bore: Feed In, Feed Out",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g85"
+        },
+        {
+            "name": "G86 - Bore: Feed In, Spindle Stop, Rapid Out, Spindle Start",
+            "insertText": "G86",
+            "detail": "Bore: Feed In, Spindle Stop, Rapid Out, Spindle Start",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g86"
+        },
+        {
+            "name": "G87 - Bore: Feed In, Spindle Reverse, Rapid Out, Spindle Reverse",
+            "insertText": "G87",
+            "detail": "Bore: Feed In, Spindle Reverse, Rapid Out, Spindle Reverse",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g87"
+        },
+        {
+            "name": "G88 - Bore: Feed In, Spindle Stop, Feed Out, Spindle Start",
+            "insertText": "G88",
+            "detail": "Bore: Feed In, Spindle Stop, Feed Out, Spindle Start",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g88"
+        },
+        {
+            "name": "G89 - Bore: Feed In, Spindle Reverse, Feed Out, Spindle Reverse",
+            "insertText": "G89",
+            "detail": "Bore: Feed In, Spindle Reverse, Feed Out, Spindle Reverse",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g89"
+        },
+        {
+            "name": "G90 - Distance Mode - Absolute",
+            "insertText": "G90",
+            "detail": "Distance Mode - Absolute",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g90"
+        },
+        {
+            "name": "G90.1 - Distance Mode - IJK Absolute",
+            "insertText": "G90.1",
+            "detail": "Distance Mode - IJK Absolute",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g90.1"
+        },
+        {
+            "name": "G90.2 - Distance Mode - ABC Absolute",
+            "insertText": "G90.2",
+            "detail": "Distance Mode - ABC Absolute",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g90.2"
+        },
+        {
+            "name": "G91 - Distance Mode – Incremental",
+            "insertText": "G91",
+            "detail": "Distance Mode – Incremental",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g91"
+        },
+        {
+            "name": "G91.1 - Distance Mode - IJK Incremental",
+            "insertText": "G91.1",
+            "detail": "Distance Mode - IJK Incremental",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g91.1"
+        },
+        {
+            "name": "G91.2 - Distance Mode - ABC Incremental",
+            "insertText": "G91.2",
+            "detail": "Distance Mode - ABC Incremental",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g91.2"
+        },
+        {
+            "name": "G92 - Working Offset",
+            "insertText": "G92",
+            "detail": "Working Offset",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g92"
+        },
+        {
+            "name": "G92.1 - Working Offset Set",
+            "insertText": "G92.1",
+            "detail": "Working Offset Set",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g92.1"
+        },
+        {
+            "name": "G93 - Feed Mode - Inverse Time",
+            "insertText": "G93",
+            "detail": "Feed Mode - Inverse Time",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g93"
+        },
+        {
+            "name": "G94 - Feed Mode - Units per Minute",
+            "insertText": "G94",
+            "detail": "Feed Mode - Units per Minute",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g94"
+        },
+        {
+            "name": "G95 - Feed Mode - Units per Revolution",
+            "insertText": "G95",
+            "detail": "Feed Mode - Units per Revolution",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g95"
+        },
+        {
+            "name": "G96 - Spindle Mode - CSS",
+            "insertText": "G96",
+            "detail": "Spindle Mode - CSS",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g96"
+        },
+        {
+            "name": "G98 - Cycle Return - Initial Z Point",
+            "insertText": "G98",
+            "detail": "Cycle Return - Initial Z Point",
+            "documentation": "https://cnc.zone/gcode/gcodes/gcode-g98"
+        }
+    ],
+    "mcodes": [
+        {
+            "name": "M0 - Pause",
+            "insertText": "M0",
+            "detail": "Pause",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m0"
+        },
+        {
+            "name": "M1 - Pause (optional)",
+            "insertText": "M1",
+            "detail": "Pause (optional)",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m1"
+        },
+        {
+            "name": "M2 - Program End",
+            "insertText": "M2",
+            "detail": "Program End",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m2"
+        },
+        {
+            "name": "M30 - Program End",
+            "insertText": "M30",
+            "detail": "Program End",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m30"
+        },
+        {
+            "name": "M3 - Spindle CW",
+            "insertText": "M3",
+            "detail": "Spindle CW",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m3"
+        },
+        {
+            "name": "M4 - Spindle CCW",
+            "insertText": "M4",
+            "detail": "Spindle CCW",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m4"
+        },
+        {
+            "name": "M5 - Spindle Stop",
+            "insertText": "M5",
+            "detail": "Spindle Stop",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m5"
+        },
+        {
+            "name": "M6 - Tool Change",
+            "insertText": "M6",
+            "detail": "Tool Change",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m6"
+        },
+        {
+            "name": "M61 - Tool Select",
+            "insertText": "M61",
+            "detail": "Tool Select",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m61"
+        },
+        {
+            "name": "M7 - Mist On",
+            "insertText": "M7",
+            "detail": "Mist On",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m7"
+        },
+        {
+            "name": "M17 - Mist Off/On",
+            "insertText": "M17",
+            "detail": "Mist Off/On",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m17"
+        },
+        {
+            "name": "M8 - Flood On",
+            "insertText": "M8",
+            "detail": "Flood On",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m8"
+        },
+        {
+            "name": "M18 - Flood Off/On",
+            "insertText": "M18",
+            "detail": "Flood Off/On",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m18"
+        },
+        {
+            "name": "M9 - Mist &amp; Flood Off",
+            "insertText": "M9",
+            "detail": "Mist &amp; Flood Off",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m9"
+        },
+        {
+            "name": "M10 - Motor Enable On/Off",
+            "insertText": "M10",
+            "detail": "Motor Enable On/Off",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m10"
+        },
+        {
+            "name": "M11 - Limit &amp; Probe Enable On/Off",
+            "insertText": "M11",
+            "detail": "Limit &amp; Probe Enable On/Off",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m11"
+        },
+        {
+            "name": "M48 - Enable Override Feed &amp; Spindle",
+            "insertText": "M48",
+            "detail": "Enable Override Feed &amp; Spindle",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m48"
+        },
+        {
+            "name": "M49 - Disable Override Feed &amp; Spindle",
+            "insertText": "M49",
+            "detail": "Disable Override Feed &amp; Spindle",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m49"
+        },
+        {
+            "name": "M50 - Enable/Disable Override Feed",
+            "insertText": "M50",
+            "detail": "Enable/Disable Override Feed",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m50"
+        },
+        {
+            "name": "M51 - Enable/Disable Override Spindle",
+            "insertText": "M51",
+            "detail": "Enable/Disable Override Spindle",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m51"
+        },
+        {
+            "name": "M52 - Controller parameters ",
+            "insertText": "M52",
+            "detail": "Controller parameters ",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m52"
+        },
+        {
+            "name": "M53 - Enable/Disable Pause ",
+            "insertText": "M53",
+            "detail": "Enable/Disable Pause ",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m53"
+        },
+        {
+            "name": "M54 - Enable/Disable THC",
+            "insertText": "M54",
+            "detail": "Enable/Disable THC",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m54"
+        },
+        {
+            "name": "M55 - Enable/Disable Transformations",
+            "insertText": "M55",
+            "detail": "Enable/Disable Transformations",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m55"
+        },
+        {
+            "name": "M56 - Enable/Disable Warp",
+            "insertText": "M56",
+            "detail": "Enable/Disable Warp",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m56"
+        },
+        {
+            "name": "M57 - Enable/Disable Swap",
+            "insertText": "M57",
+            "detail": "Enable/Disable Swap",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m57"
+        },
+        {
+            "name": "M58 - Kinematics Mode",
+            "insertText": "M58",
+            "detail": "Kinematics Mode",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m58"
+        },
+        {
+            "name": "M59 - Wait For Input",
+            "insertText": "M59",
+            "detail": "Wait For Input",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m59"
+        },
+        {
+            "name": "M62 - Output",
+            "insertText": "M62",
+            "detail": "Output",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m62"
+        },
+        {
+            "name": "M63 - Output PWM",
+            "insertText": "M63",
+            "detail": "Output PWM",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m63"
+        },
+        {
+            "name": "M64 - Output ExtOut",
+            "insertText": "M64",
+            "detail": "Output ExtOut",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m64"
+        },
+        {
+            "name": "M65 - Output Serial",
+            "insertText": "M65",
+            "detail": "Output Serial",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m65"
+        },
+        {
+            "name": "M66 - Output I2C",
+            "insertText": "M66",
+            "detail": "Output I2C",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m66"
+        },
+        {
+            "name": "M70 - Modal State Store",
+            "insertText": "M70",
+            "detail": "Modal State Store",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m70"
+        },
+        {
+            "name": "M71 - Modal State Invalidate",
+            "insertText": "M71",
+            "detail": "Modal State Invalidate",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m71"
+        },
+        {
+            "name": "M72 - Modal State Restore",
+            "insertText": "M72",
+            "detail": "Modal State Restore",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m72"
+        },
+        {
+            "name": "M73 - Modal State Store &amp; Autorestore",
+            "insertText": "M73",
+            "detail": "Modal State Store &amp; Autorestore",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m73"
+        },
+        {
+            "name": "M82 - Distance Mode - ABC Absolute",
+            "insertText": "M82",
+            "detail": "Distance Mode - ABC Absolute",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m82"
+        },
+        {
+            "name": "M83 - Distance Mode - ABC Incremental",
+            "insertText": "M83",
+            "detail": "Distance Mode - ABC Incremental",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m83"
+        },
+        {
+            "name": "M98 - Call Subprogram",
+            "insertText": "M98",
+            "detail": "Call Subprogram",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m98"
+        },
+        {
+            "name": "M99 - Return From Subprogram",
+            "insertText": "M99",
+            "detail": "Return From Subprogram",
+            "documentation": "https://cnc.zone/gcode/mcodes/mcode-m99"
+        }
+    ],
+    "comments": [
+        {
+            "name": "CLEAR",
+            "insertText": "(CLEAR)",
+            "detail": "(CLEAR)",
+            "documentation": "clears output window"
+        },
+        {
+            "name": "PRINT",
+            "snippet": "(PRINT,'${1:text}')\n",
+            "detail": "(PRINT,'Text')",
+            "documentation": "prints message to output window"
+        },
+        {
+            "name": "STATUS",
+            "snippet": "(STATUS,'${1:message}')\n",
+            "detail": "(STATUS,'Message')",
+            "documentation": "shows message in status bar"
+        },
+        {
+            "name": "MSG",
+            "snippet": "(MSG,'${1:message}')\n",
+            "detail": "shows dialog with message",
+            "documentation": "(MSG,'my Message')"
+        },
+        {
+            "name": "CLIPBOARD",
+            "snippet": "(CLIPBOARD,'${1:message}')\n",
+            "detail": "stores message to clipboard",
+            "documentation": "(CLIPBOARD,'my Text')"
+        },
+        {
+            "name": "MDI",
+            "snippet": "(CLIPBOARD,'${1:message}')\n",
+            "detail": "stores message to MDI",
+            "documentation": "(MDI,'my Text')"
+        },
+        {
+            "name": "LOG",
+            "snippet": "(LOG,'${1:message}')\n",
+            "detail": "stores message to MDI"
+        },
+        {
+            "name": "LOGCREATE",
+            "snippet": "(LOGCREATE, $0)",
+            "detail": "creates new log file"
+        },
+        {
+            "name": "LOGOPEN",
+            "snippet": "(LOGOPEN, $0)",
+            "detail": "opens existing log file"
+        },
+        {
+            "name": "LOGCLOSE",
+            "snippet": "(LOGCLOSE, $0)",
+            "detail": "closes log file"
+        },
+        {
+            "name": "PARAMSCLEAR",
+            "insertText": "(PARAMSCLEAR)",
+            "detail": "clears all parameters"
+        },
+        {
+            "name": "TXT",
+            "insertText": "(TXT,'${1:text}')",
+            "detail": "stores text property"
+        },
+        {
+            "name": "POINTSCLEAR",
+            "insertText": "(POINTSCLEAR)",
+            "detail": "clears points collection"
+        },
+        {
+            "name": "POINTSSAVE",
+            "insertText": "(POINTSSAVE",
+            "detail": "saves points collection to file"
+        },
+        {
+            "name": "POINTSLOAD",
+            "insertText": "(POINTSLOAD",
+            "detail": "loads points collection from file"
+        },
+        {
+            "name": "POINTSLOAD",
+            "insertText": "(POINTSLOAD)",
+            "detail": "loads points collection from file"
+        },
+        {
+            "name": "POINTSSHAPES",
+            "insertText": "(POINTSSHAPES)",
+            "detail": "loads points collection from file"
+        },
+        {
+            "name": "POINT",
+            "insertText": "(POINT)",
+            "detail": "adds point from data to collection"
+        },
+        {
+            "name": "POINT",
+            "insertText": "(POINT)",
+            "detail": "adds point from probe to collection"
+        },
+        {
+            "name": "POINTPOS",
+            "insertText": "(POINTPOS)",
+            "detail": "adds point from position to collection"
+        },
+        {
+            "name": "PY",
+            "snippet": "(PY,'${1:myFilePath/myfile.py}')",
+            "detail": "executes python script synchronousely"
+        },
+        {
+            "name": "PYTHR",
+            "snippet": "(PYTHR,'${1:myFilePath/myfile.py}')",
+            "detail": "executes python script in async thread"
+        },
+        {
+            "name": "NAME",
+            "snippet": "(NAME,'${1:programName}')",
+            "detail": "sets program name"
+        },
+        {
+            "name": "DESC",
+            "snippet": "(DESC,'${1:description}')",
+            "detail": "sets program description"
+        },
+        {
+            "name": "DLGNAME",
+            "snippet": "(DLGNAME,'${1:name}')",
+            "detail": "sets dialog name"
+        },
+        {
+            "name": "DLG",
+            "snippet": "(DLG,${1:properties})",
+            "detail": "sets dialog property"
+        },
+        {
+            "name": "DLGSHOW",
+            "snippet": "(DLGSHOW)",
+            "detail": "shows dialog"
+        },
+        {
+            "name": "ARRAY",
+            "snippet": "(ARRAY, $1)",
+            "detail": "creates parameters from data"
+        },
+        {
+            "name": "ARCHR",
+            "snippet": "(ARARCHRRAY, $1)",
+            "detail": "creates parameters from characters"
+        },
+        {
+            "name": "CRC16",
+            "snippet": "(CRC16, $1)",
+            "detail": "calculates and adds crc16 to parameters"
+        },
+        {
+            "name": "CRC32",
+            "snippet": "(CRC32, $1)",
+            "detail": "calculates and adds CRC32 to parameters"
+        },
+        {
+            "name": "SW_RESET",
+            "snippet": "(SW_RESET)",
+            "detail": "stopwatch reset"
+        },
+        {
+            "name": "SW_PRINT",
+            "snippet": "(SW_PRINT)",
+            "detail": "stopwatch print"
+        },
+        {
+            "name": "BLOCK_BEGIN",
+            "snippet": "(BLOCK_BEGIN)",
+            "detail": "begin block"
+        },
+        {
+            "name": "BLOCK_BEGIN + BLOCK_END",
+            "snippet": "(BLOCK_BEGIN)\n$0\n(BLOCK_BEGIN)",
+            "detail": "begin block"
+        },
+        {
+            "name": "BLOCK_END",
+            "snippet": "(BLOCK_END)",
+            "detail": "end block"
+        },
+        {
+            "name": "USB",
+            "snippet": "(USB,$1)",
+            "detail": "executes usb command"
+        },
+        {
+            "name": "EXPR",
+            "snippet": "(EXPR,$1)",
+            "detail": "executes expression"
+        },
+        {
+            "name": "COLOR=0xRRGGBB",
+            "snippet": "(COLOR=0x${1:hex_color})",
+            "detail": "g-code color",
+            "documentation": "Draws all lines in 3D View in the selected color which follows this entry.\n\ng-code color in hex-notation\n\n0xffffff = white, 0x000000 = black, 0xff0000 = red, 0x00ff00 = green, 0x0000ff = blue"
+        }
+    ],
+    "owords": [
+        {
+            "name": "sub",
+            "label": "sub..endsub subroutine block",
+            "detail": "sub..endsub subroutine block",
+            "documentation": "O<id> sub\n  ...\nO<id> endsub [optional_value]",
+            "snippet": "O<${1:mySub}> sub\n\t$0\nO<$1> endsub"
+        },
+        {
+            "name": "sub",
+            "label": "sub..",
+            "detail": "Begin of subroutine block",
+            "documentation": "O<id> sub",
+            "snippet": "O<${1:mySub}> sub\n"
+        },
+        {
+            "name": "endsub",
+            "detail": "End subroutine",
+            "documentation": "o<id> endsub",
+            "snippet": "O<${1:mySub}> endsub\n$0"
+        },
+        {
+            "name": "return",
+            "detail": "Exit subroutine",
+            "documentation": "O<id> return",
+            "snippet": "O<${1:mySub}> return\n$0"
+        },
+        {
+            "name": "call",
+            "detail": "Call subroutine",
+            "documentation": "O<id> call",
+            "snippet": "O<${1:mySub}> call $t0"
+        },
+        {
+            "name": "call",
+            "label": "call [value]",
+            "detail": "Call subroutine with value",
+            "documentation": "O<id> sub\n\t(print,Values: #1, #2)\nO<id> endsub [13]\n\nO<id> call [11] [12]\n(print,Returned value: #<_return>)",
+            "snippet": "O<${1:mySub}> call /[${2:myValue/] $t0"
+        },
+        {
+            "name": "do",
+            "label": "do..while",
+            "detail": "do..while loop block",
+            "documentation": "O<test> do\n#<_cnt> = [#<_cnt> - 1]\n(print,CNT: #<_cnt>)\nO<test> while [#<_cnt> GT 0]",
+            "snippet": "O<${1:myBlock}> do\n\t$0\nO<$1> while [${2:condition}]"
+        },
+        {
+            "name": "while",
+            "label": "while..endwhile",
+            "detail": "while..endwhile loop block",
+            "documentation": "#<_cnt> = 10\n(print,BEGIN: #<_cnt>)\nO<test> while [#<_cnt> GT 0]\n#<_cnt> = [#<_cnt> - 1]\n(print,CNT: #<_cnt>)\nO<test> endwhile\n(print,END: #<_cnt>)",
+            "snippet": "O<${1:myBlock}> while [$2:condition]\n\t$0\nO<$1> endwhile"
+        },
+        {
+            "name": "endwhile",
+            "detail": "end of while.. block",
+            "documentation": "#<_cnt> = 10\n(print,BEGIN: #<_cnt>)\nO<test> while [#<_cnt> GT 0]\n#<_cnt> = [#<_cnt> - 1]\n(print,CNT: #<_cnt>)\nO<test> endwhile\n(print,END: #<_cnt>)",
+            "snippet": "O<${1:myBlock}> endwhile\n"
+        },
+        {
+            "name": "continue",
+            "detail": "Skip the remaining block and start next loop",
+            "documentation": "O<test> continue\nSkip the remaining block and start next loop",
+            "snippet": "O<${1:myBlock}> continue"
+        },
+        {
+            "name": "break",
+            "detail": "Exit the loop block",
+            "documentation": "O<test> break\nExit the loop block",
+            "snippet": "O<${1:myBlock}> break"
+        },
+        {
+            "name": "repeat",
+            "detail": "repeat..endrepeat loop block",
+            "documentation": "#<_cnt> = 0\n(print,BEGIN: #<_cnt>)\nO<test> repeat[5]\n  #<_cnt> = [#<_cnt> + 1]\n  (print,CNT: #<_cnt>)\nO<test> endrepeat\n(print,END: #<_cnt>)",
+            "snippet": "O<${1:myBlock}> repeat [${2:count}]\n\t$0\nO<$1> endrepeat\n"
+        },
+        {
+            "name": "endrepeat",
+            "detail": "endrepeat - End of loop block",
+            "documentation": "#<_cnt> = 0\n(print,BEGIN: #<_cnt>)\nO<test> repeat[5]\n  #<_cnt> = [#<_cnt> + 1]\n  (print,CNT: #<_cnt>)\nO<test> endrepeat\n(print,END: #<_cnt>)",
+            "snippet": "O<${1:myBlock}> endrepeat\n"
+        },
+        {
+            "name": "if",
+            "label": "if..",
+            "detail": "Beginn of if.. block",
+            "snippet": "O<${1:myBlock}> if [${2:condition}]\n\t"
+        },
+        {
+            "name": "if",
+            "label": "if..endif",
+            "detail": "if..endif condition block",
+            "snippet": "O<${1:myBlock}> if [${2:condition}]\n\t$0\nO<$1> endif\n"
+        },
+        {
+            "name": "if",
+            "label": "if..else..endif",
+            "detail": "if..else..endif condition block",
+            "snippet": "O<${1:myBlock}> if [${2:condition}]\n\t$3\nO<$1> else\n\t$0\nO<$1> endif\n"
+        },
+        {
+            "name": "elseif",
+            "detail": "elseif [condition evaluation]",
+            "snippet": "O<${1:myBlock}> elseif [${2:condition}]\n"
+        },
+        {
+            "name": "endif",
+            "detail": " - End of if..endif condition block",
+            "snippet": "O<${1:myBlock}> endif"
+        }
+    ],
+    "macros": [
+        {
+            "name": "o100 - Help",
+            "insertText": "o100",
+            "detail": "Help",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o100"
+        },
+        {
+            "name": "o101 - Argument List",
+            "insertText": "o101",
+            "detail": "Argument List",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o101"
+        },
+        {
+            "name": "o102 - Measure Results",
+            "insertText": "o102",
+            "detail": "Measure Results",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o102"
+        },
+        {
+            "name": "o103 - Measure Results XY",
+            "insertText": "o103",
+            "detail": "Measure Results XY",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o103"
+        },
+        {
+            "name": "o108 - Probe Calibration",
+            "insertText": "o108",
+            "detail": "Probe Calibration",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o108"
+        },
+        {
+            "name": "o109 - Probe Check",
+            "insertText": "o109",
+            "detail": "Probe Check",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o109"
+        },
+        {
+            "name": "o110 - Probe",
+            "insertText": "o110",
+            "detail": "Probe",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o110"
+        },
+        {
+            "name": "o120 - Meas. Work Offset",
+            "insertText": "o120",
+            "detail": "Meas. Work Offset",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o120"
+        },
+        {
+            "name": "o121 - Meas. Coord. System",
+            "insertText": "o121",
+            "detail": "Meas. Coord. System",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o121"
+        },
+        {
+            "name": "o122 - Meas. Tool Offset",
+            "insertText": "o122",
+            "detail": "Meas. Tool Offset",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o122"
+        },
+        {
+            "name": "o130 - Meas. Edge Position",
+            "insertText": "o130",
+            "detail": "Meas. Edge Position",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o130"
+        },
+        {
+            "name": "o131 - Meas. Edge Find",
+            "insertText": "o131",
+            "detail": "Meas. Edge Find",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o131"
+        },
+        {
+            "name": "o135 - Meas. Edge Angle",
+            "insertText": "o135",
+            "detail": "Meas. Edge Angle",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o135"
+        },
+        {
+            "name": "o140 - Meas. In Corner",
+            "insertText": "o140",
+            "detail": "Meas. In Corner",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o140"
+        },
+        {
+            "name": "o145 - Meas. Out Corner",
+            "insertText": "o145",
+            "detail": "Meas. Out Corner",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o145"
+        },
+        {
+            "name": "o150 - Meas. Hole",
+            "insertText": "o150",
+            "detail": "Meas. Hole",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o150"
+        },
+        {
+            "name": "o155 - Meas. Protrusion",
+            "insertText": "o155",
+            "detail": "Meas. Protrusion",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o155"
+        },
+        {
+            "name": "o160 - Meas. Slot",
+            "insertText": "o160",
+            "detail": "Meas. Slot",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o160"
+        },
+        {
+            "name": "o165 - Meas. Tab",
+            "insertText": "o165",
+            "detail": "Meas. Tab",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o165"
+        },
+        {
+            "name": "o190 - Meas. Surf. Height",
+            "insertText": "o190",
+            "detail": "Meas. Surf. Height",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o190"
+        },
+        {
+            "name": "o191 - Meas. Surf. Angle 3",
+            "insertText": "o191",
+            "detail": "Meas. Surf. Angle 3",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o191"
+        },
+        {
+            "name": "o192 - Meas. Surf. Angle 5",
+            "insertText": "o192",
+            "detail": "Meas. Surf. Angle 5",
+            "documentation": "https://cnc.zone/gcode/macros/macro-o192"
+        }
     ]
 }
