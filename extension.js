@@ -5,7 +5,7 @@ var watcher
 /**
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+async function activate(context) {
 	var expression_tokens = {
 		"sections": [],
 		"functions": [],
@@ -23,100 +23,100 @@ function activate(context) {
 	const gcodeUrl = 'https://cnc.zone/gcode/gcodes/gcodes';
 	const mcodeUrl = 'https://cnc.zone/gcode/mcodes/mcodes';
 	const macrosUrl = 'https://cnc.zone/gcode/macros/macros'
+	const sections = [
+		'sections',
+		'functions',
+		'operators',
+		'parameters',
+		'gcodes',
+		'mcodes',
+		'macros',
+		'comments',
+		'owords'
+	]
 
 	const reg_WordBoundary = new RegExp("((?:_\\w+)|(?:#\\w+)|(?:\\w+)|(?:'[^']*')|(?:;[^\\n]*))");
 	//const reg_WordBoundary_Gcode = new RegExp("((?:/<#\\w+/|/>)|(?:O/<\\w*/>?)|(?:o/<\\w+/>)|(?:/<#\\.+?#/>)|(?:\\w+)|(?:'[^']*')|(?:;[^\\n]*))");
 	const reg_WordBoundary_Gcode = new RegExp('(\\(\\w*)|(#\\<_?\\w*\\|?>?)|(^\\s*O<)|(o\\<\\w+\\>)|(\\<#.+\\>?)|(\\b\\w+\\b)|(\'[^\']*\')|(;[^\\n]*)');
 	const reg_GCode = new RegExp("\\b[G|M|g|m][0-9]+\\b");
-	const reg_GCodeNormalize = new RegExp('(?<=^[GM])0+(?=[0-9])|\\s+[^0-9]*$', 'gism');
+	const reg_GCodeNormalize = new RegExp('(?<=^[GM])0+(?=[0-9])|\\s+[^0-9]*$', 'ism');
 	const reg_prefixString = new RegExp('(?<!#)<|\'', 'imsg')
 	const reg_fileTypeMCode = new RegExp('(?:scripts/)(?<mcode>M[0-9]+).gcode', 'i')
 	const reg_fileTypeMacro = new RegExp('(?:scripts/)(?<macro>o[0-9]+).gcode', 'i')
 	const reg_commentName = new RegExp('\\(name\\s*,\\s*\'?(?<name>.*?)\'?\\)', 'i')
 	const reg_docFileArea = new RegExp(';[\\s\\S]*?(?:^([^;])|\\z)', 'im')
+	const reg_scriptFileNameSplit = new RegExp('(?<base>.*\\/(?<profile>.*?))\\/(?<profilerelative>scripts\\/(?<filename>(?<id>[o|M][0-9]+).gcode))', 'mi')
+	//const reg_getDocuContent = new RegExp('-- wikipage start -->[\\n|\\s]*(.*?)[\\n|\\s]*<!-- wikipage stop --', 'is')
+	const reg_getDocuContent = new RegExp('(?<=<body>)(.*)*(?=<\\\/body)', 'is')
+	const reg_removeComment = new RegExp('(<!--.*?-->)','isg');
 
-
-
-	function downloadParameters(context, force) {
+	function downloadFile(context, urlString) {
 		return new Promise((resolve, reject) => {
 			var https = require('https');
-			var url = new URL(parametersUrl)
-			https.get(url, function (res) {
+			var url = new URL(urlString)
+			return https.get(url, function (res) {
 				var body = '';
 				res.on('data', function (chunk) {
 					body += chunk;
 				});
 				res.on('end', function () {
-					var ret = parseParameterHtml(body, context, force);
-					resolve(ret);
+					resolve(body)
 				});
 			}).on('error', function (e) {
 				console.log("Got error: " + e.message);
-				vscode.window.showErrorMessage('Searching online for new Parameters failed: ' + e.message);
+				vscode.window.showErrorMessage('Searching for new data failed: ' + e.message);
 				reject(e)
 			});
+		});
+
+	};
+	function downloadParameters(context, force) {
+		return new Promise((resolve, reject) => {
+			downloadFile(context, parametersUrl)
+				.then(dat=>{
+					var ret = parseParameterHtml(dat, context, force);
+					resolve(ret);
+				})
+				.catch(error => {
+					reject(error)
+				})
 		})
 	};
 	function downloadGcode(context, force) {
 		return new Promise((resolve, reject) => {
-			var https = require('https');
-			var url = new URL(gcodeUrl)
-			return https.get(url, function (res) {
-				var body = '';
-				res.on('data', function (chunk) {
-					body += chunk;
-				});
-				res.on('end', function () {
-					var ret = parseGCodeHtml(body, context, force);
+			downloadFile(context, gcodeUrl)
+				.then(dat => {
+					var ret = parseGCodeHtml(dat, context, force);
 					resolve(ret);
-				});
-			}).on('error', function (e) {
-				console.log("Got error: " + e.message);
-				vscode.window.showErrorMessage('Searching online for new GCodes failed: ' + e.message);
-				reject(e)
-			});
-		});
-
+				})
+				.catch(error => {
+					reject(error)
+				})
+		})
 	};
 	function downloadMcode(context, force) {
 		return new Promise((resolve, reject) => {
-			var https = require('https');
-			var url = new URL(mcodeUrl)
-			return https.get(url, function (res) {
-				var body = '';
-				res.on('data', function (chunk) {
-					body += chunk;
-				});
-				res.on('end', function () {
-					var ret = parseMCodeHtml(body, context, force);
+			downloadFile(context, mcodeUrl)
+				.then(dat => {
+					var ret = parseMCodeHtml(dat, context, force);
 					resolve(ret);
-				});
-			}).on('error', function (e) {
-				console.log("Got error: " + e.message);
-				vscode.window.showErrorMessage('Searching online for new MCodes failed: ' + e.message);
-				reject(e)
-			});
-		});
+				})
+				.catch(error => {
+					reject(error)
+				})
+		})
 	};
 	function downloadmacros(context, force) {
 		return new Promise((resolve, reject) => {
-			var https = require('https');
-			var url = new URL(macrosUrl)
-			return https.get(url, function (res) {
-				var body = '';
-				res.on('data', function (chunk) {
-					body += chunk;
-				});
-				res.on('end', function () {
-					var ret = parseMacrosHtml(body, context, force);
+			downloadFile(context, macrosUrl)
+				.then(dat => {
+					var ret = parseMacrosHtml(dat, context, force);
 					resolve(ret);
-				});
-			}).on('error', function (e) {
-				console.log("Got error: " + e.message);
-				vscode.window.showErrorMessage('Searching online for new macros failed: ' + e.message);
-				reject(e)
-			});
-		});
+				})
+				.catch(error => {
+					reject(error)
+				})
+		})
 	};
 	function parseMacrosHtml(data, context, force) {
 		var regexp = new RegExp('href=\\"(?<url>.*?)\\"(?:.*?data-wiki-id=\\"gcode:(?:mcodes|gcodes|macros):(?:mcode|gcode|macro)-.*\\"\\>)(?<gcode>[G|M|o|0-9/.]+)\\s-\\s(?<detail>.*)</a>', 'gmi')
@@ -127,10 +127,11 @@ function activate(context) {
 		regexResult.forEach(element => {
 			var found = false
 			var tokenfound
+			var id = element['groups']['gcode'] + ' - ' + element['groups']['detail']
 
 			for (let X = 0; X < expression_tokens[type].length; X++) {
 				const element2 = expression_tokens[type][X];
-				if (element2['name'] == element['groups']['gcode']) {
+				if (element2['name'] == id) {
 					found = true
 					tokenfound = element2
 					return
@@ -143,7 +144,7 @@ function activate(context) {
 					token = tokenfound
 				} else {
 					token = {
-						"name": element['groups']['gcode']
+						"name": id
 					}
 				}
 				token["insertText"] = element['groups']['gcode']
@@ -151,9 +152,12 @@ function activate(context) {
 				token["label"] = element['groups']['gcode'] + ' - ' + element['groups']['detail']
 				
 				if (element['groups']['url']) {
-					token['documentation'] = "\n## [Online Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")" 
+					token['documentation'] = "[Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+					token["docDownloadPending"] = 'https://cnc.zone/_export/xhtml' + element['groups']['url']
+					token["documentationUrl"] = 'https://cnc.zone' + element['groups']['url']
+					token["documentationBaseUrl"] = 'https://cnc.zone/'
 				}
-
+				
 				if (!found) {
 					expression_tokens[type].push(token)
 				}
@@ -173,10 +177,11 @@ function activate(context) {
 		regexResult.forEach(element => {
 			var found = false
 			var tokenfound
+			var id = element['groups']['gcode'] + ' - ' + element['groups']['detail']
 
 			for (let X = 0; X < expression_tokens[type].length; X++) {
 				const element2 = expression_tokens[type][X];
-				if (element2['name'] == element['groups']['gcode']) {
+				if (element2['name'] == id) {
 					found = true
 					tokenfound = element2
 					return
@@ -195,15 +200,17 @@ function activate(context) {
 					token = tokenfound
 				} else {
 					token = {
-						"name": element['groups']['gcode'] + ' - ' + element['groups']['detail']
+						"name": id
 					}
 				}
 				token["insertText"] = element['groups']['gcode']
 				token["detail"] = element['groups']['detail']
-				//token["label"] = element['groups']['gcode'] + ' - ' + element['groups']['detail']
 
 				if (element['groups']['url']) {
-					token['documentation'] = "\n## [Online Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+					token['documentation'] = "[Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+					token["docDownloadPending"] = 'https://cnc.zone/_export/xhtml' + element['groups']['url']
+					token["documentationUrl"] = 'https://cnc.zone' + element['groups']['url']
+					token["documentationBaseUrl"] = 'https://cnc.zone/'
 				}
 
 				if (!found) {
@@ -216,7 +223,6 @@ function activate(context) {
 		vscode.window.showInformationMessage(count + ' new MCodes imported');
 		return count
 	}
-
 	function parseGCodeHtml(data, context, force) {
 		var regexp = new RegExp('href=\\"(?<url>.*?)\\"(?:.*?data-wiki-id=\\"gcode:gcodes:gcode-.*\\"\\>)(?<gcode>[G|M|0-9/.]+)\\s-\\s(?<detail>.*)</a>', 'gmi')
 		var regexResult = [...data.matchAll(regexp)]
@@ -226,10 +232,11 @@ function activate(context) {
 		regexResult.forEach(element => {
 			var found = false
 			var tokenfound
+			var id = element['groups']['gcode'] + ' - ' + element['groups']['detail']
 
 			for (let X = 0; X < expression_tokens[type].length; X++) {
 				const element2 = expression_tokens[type][X];
-				if (element2['name'] == element['groups']['gcode']) {
+				if (element2['name'] == id) {
 					found = true
 					tokenfound = element2
 					return
@@ -248,15 +255,17 @@ function activate(context) {
 					token = tokenfound
 				} else {
 					token = {
-						"name": element['groups']['gcode'] + ' - ' + element['groups']['detail']
+						"name": id
 					}
 				}
 				token["insertText"] = element['groups']['gcode']
-				//token["label"] = element['groups']['gcode'] + ' - ' + element['groups']['detail']
 				token["detail"] = element['groups']['detail']
 
 				if (element['groups']['url']) {
-					token['documentation'] = "\n## [Online Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+					token['documentation'] = "[Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+					token["docDownloadPending"] = 'https://cnc.zone/_export/xhtml' + element['groups']['url']
+					token["documentationUrl"] = 'https://cnc.zone' + element['groups']['url']
+					token["documentationBaseUrl"] = 'https://cnc.zone/'
 				}
 
 				if (!found) {
@@ -269,9 +278,8 @@ function activate(context) {
 		vscode.window.showInformationMessage(count + ' new GCodes imported');
 		return count
 	}
-
 	function parseParameterHtml(data, context, force) {
-		var regexp = /(?:data-wiki-id=\"tng:parameters:param.*?\>)(_\w+)/gmi
+		var regexp = new RegExp('(?:data-wiki-id=\\"tng:parameters:param.*?\\>)(_\\w+)', 'gmi')
 		var regexResult = [...data.matchAll(regexp)]
 		var type = 'parameters'
 		var count = 0
@@ -279,10 +287,11 @@ function activate(context) {
 		regexResult.forEach(element => {
 			var found = false
 			var tokenfound
+			var id = element[1]
 
 			for (let X = 0; X < expression_tokens[type].length; X++) {
 				const element2 = expression_tokens[type][X];
-				if (element2['name'] == element[1]) {
+				if (element2['name'] == id) {
 					found = true
 					tokenfound = element2
 					return
@@ -291,24 +300,23 @@ function activate(context) {
 
 			//TODO: force
 			if (!found) {
+				count++
 				var token = {
-					"name": element[1]
+					"name": id
 				}
+				expression_tokens[type].push(token)
+
 				if (element[1].endsWith('_num')) {
 					token['snippet'] = element[1] + '|' + '${1:number}'
-					if (element[1].endsWith('_axis')) {
-						token['snippet'] = element[1] + '|' + '${1:axisnumber}'
-					} else {
-						token['insertText'] = element[1]
-					}
-
-					expression_tokens[type].push(token)
-					count++
+				} else if(element[1].endsWith('_axis')) {
+					token['snippet'] = element[1] + '|' + '${1:axisnumber}'
+				} else {
+					token['insertText'] = element[1]
 				}
 
 				//TODO:
-				// if (element['groups']['url']) {
-				// 	token['documentation'] = "\n\n[Online Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+				//if (element['groups']['url']) {
+				// 	token['documentation'] = "[Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
 				// }
 			}
 		})
@@ -328,31 +336,315 @@ function activate(context) {
 			//TODO: Exception handling
 		}
 
-		await updateTokensFromWorkspace()
+		//await updateTokensFromWorkspace()
+	}
+
+	function initFileSystemWatcher() {
+		return new Promise(function (resolve, reject) {
+			try {
+				watcher = vscode.workspace.createFileSystemWatcher("{**/*.txt,**/*.gcode}");
+				watcher.onDidChange(uri => {
+					analyzeFile(uri)
+				});
+				watcher.onDidCreate(uri => {
+					analyzeFile(uri)
+				});
+				watcher.onDidDelete(uri => {
+					removeAnalyzedFile(uri)
+				});
+				resolve()
+			} catch (error) {
+				reject(error)
+			}
+			return Promise.resolve()
+		})
+	}
+
+	function save_expression_tokens(context) {
+		var enc = new TextEncoder();
+		var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "expr_tokens.json");
+
+		var expressionsFiltered = {}
+		for (const [key, value] of Object.entries(expression_tokens)) {
+			expressionsFiltered[key] = []
+			for (const item of value) {
+				if (!item.hasOwnProperty['isFromFile']) {
+					expressionsFiltered[key].push(item)
+				}
+			}
+		}
+
+		return vscode.workspace.fs.writeFile(fileUri, enc.encode(JSON.stringify(expressionsFiltered)));
+	}
+
+	async function load_expression_tokens(context) {
+		var dec = new TextDecoder("utf-8");
+		try {
+			var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "expr_tokens.json");
+			await vscode.workspace.fs.stat(fileUri);
+			var value = await vscode.workspace.fs.readFile(fileUri)
+			var data = JSON.parse(dec.decode(value));
+			addToexpression_tokens(data);
+			return true
+		} catch (e) {
+			vscode.window.showInformationMessage('Could not load cache file.');
+			return false
+		}
+	}
+
+	function addToexpression_tokens(dataObject, force) {
+		for (const section of sections) {
+			if (dataObject.hasOwnProperty(section)) {
+				for (const item of dataObject[section]) {
+					for (var i = 0; i < expression_tokens[section].length; i++){
+						var item2 = expression_tokens[section][i]
+						
+						if (item.hasOwnProperty('isFromFile')) {
+							if (item2['isFromFile'] == item['isFromFile']) {
+								if (force) {
+									expression_tokens[section][i] = item
+								}
+								return
+							}
+						} else {
+							if (item2['name'] == item['name']) {
+								if (force) {
+									expression_tokens[section][i] = item
+								}
+								return
+							}
+						}
+					}
+					expression_tokens[section].push(item);
+				}
+			}
+		}
 	}
 
 
+	function findTokens(list, token, kind, regToApply, prefix, suffix) {
+		var result = [];
+		if (!prefix) { prefix = '' }
+		if (!suffix) { suffix = '' }
 
-	loadData(context);
+		var tokenLow = token.toLowerCase();
+		if (regToApply) {
+			tokenLow = tokenLow.replace(regToApply, '');
+		}
 
-	try {
-		watcher = vscode.workspace.createFileSystemWatcher("{**/*.txt,**/*.gcode}");
-		watcher.onDidChange(uri => {
-			analyzeFile(uri)
-		});
-		watcher.onDidCreate(uri => {
-			analyzeFile(uri)
-		});
-		watcher.onDidDelete(uri => {
-			removeAnalyzedFile(uri)
-		});
-	} catch (error) {
+		list.forEach(element => {
+			try {
+				if (!element.hasOwnProperty('name')) {
+					return;
+				}
+				if (vscode.window.activeTextEditor && element.hasOwnProperty('isFromFile')) {
+					var elementmatch = element['isFromFile'].match(reg_scriptFileNameSplit)
+					if (elementmatch) {
+						if (!vscode.window.activeTextEditor.document.uri.path.startsWith(elementmatch.groups['base'])){
+							return
+						}
+					}
+				}
+				var name = element['name'].toLowerCase();
+				if (regToApply) {
+					name = name.replace(regToApply, '');
+				}
+				if (token == '' || name.includes(tokenLow)) {
+					var item
+					if (element['label']) {
+						item = new vscode.CompletionItem(element['label'], kind);
+					} else {
+						item = new vscode.CompletionItem(element['name'], kind);
+					}
+
+					item.filterText = element['name'] + element['detail'];
+					if (element['detail']) {
+						item.detail = element['detail']
+					}
+
+					if (element['documentationHTML']) {
+						var doc = new vscode.MarkdownString(element['documentationHTML'])
+						doc.supportHtml = true 
+						if (element['documentationBaseUrl']) {
+							doc.baseUri = vscode.Uri.parse(element['documentationBaseUrl'],false)
+						}
+						item.documentation = doc
+					}else if (element['documentation']) {
+						item.documentation = new vscode.MarkdownString( element['documentation'])
+					}
+
+					
+					if (element['snippet']) {
+						item.insertText = new vscode.SnippetString(prefix + element['snippet'] + suffix);
+					} else if (element['insertText']) {
+						item.insertText = prefix +  element['insertText'] + suffix;
+					} else {
+						item.insertText = new vscode.SnippetString(prefix + element['name'] + "($1)" + suffix)
+					}
+
+					result.push(item);
+				}
+			} catch (error) {
+				vscode.window.showErrorMessage(error.message);
+			}
+		})
+		return result;
 	}
+
+	function removeAnalyzedFile(uri) {
+		var match = uri.path.match(reg_fileTypeMCode)
+		if (match.groups['mcode']) {
+			for (let x = 0; x < expression_tokens['mcode'].length; x++) {
+				const element = expression_tokens['mcode'][x];
+				if (element['isFromFile'] == uri.path) {
+					delete expression_tokens['mcode'][x];
+					break
+				}
+			}
+		}
+
+		return Promise.resolve();
+	}
+
+	async function analyzeFile(uri) {
+		try {
+			var match = uri.path.match(reg_fileTypeMCode)
+			if (match && match.groups['mcode']) {
+				var dec = new TextDecoder("utf-8");
+				var txt = dec.decode(await vscode.workspace.fs.readFile(uri))
+				var label = ''
+				var doc = ''
+
+				if (txt) {
+					var nameArrayResult =txt.match( reg_commentName)
+
+					if (nameArrayResult && nameArrayResult.length == 2) {
+						label = nameArrayResult[1]
+					}
+
+					var docMatch = txt.match(reg_docFileArea)
+					if (docMatch) {
+						doc = docMatch[0].replace(';', "  \n")
+					}
+				}
+
+				var item = {
+					'name': match.groups['mcode'],
+					'insertText': match.groups['mcode'],
+					'label': match.groups['mcode'] + ' - ' + label,
+					'detail': label,
+					'isFromFile': uri.path
+				}
+				var scriptFileMatch = uri.path.match(reg_scriptFileNameSplit)
+				if (scriptFileMatch) {
+					item['documentation'] = doc + "[" + scriptFileMatch.groups['profilerelative'] + "](" + uri.toString() + ")"
+				} else {
+					item['documentation'] = doc + "[From File](" + uri.toString() + ")"
+				}
+
+				addToexpression_tokens(
+					{
+						"mcodes": [item]
+					}
+					, true)
+			}
+
+			var match = uri.path.match(reg_fileTypeMacro)
+			if (match && match.groups['macro']) {
+				var dec = new TextDecoder("utf-8");
+				var txt = dec.decode(await vscode.workspace.fs.readFile(uri))
+				var label = ''
+				var doc = ''
+
+				if (txt) {
+					var nameArrayResult =txt.match( reg_commentName)
+
+					if (nameArrayResult && nameArrayResult.length == 2) {
+						label = nameArrayResult[1]
+					}
+
+					var docMatch = txt.match(reg_docFileArea)
+					if (docMatch) {
+						doc = docMatch[0].replace(';', "  \n")
+					}
+
+				}
+
+				var item1 = {
+					'name': match.groups['mcode'],
+					'insertText': match.groups['mcode'],
+					'label': match.groups['mcode'] + ' - ' + label,
+					'detail': label,
+					'isFromFile': uri.path
+				}
+				var scriptFileMatch = uri.path.match(reg_scriptFileNameSplit)
+				if (scriptFileMatch) {
+					item1['documentation'] = doc + "[" + scriptFileMatch.groups['profilerelative'] + "](" + uri.toString() + ")"
+				} else {
+					item1['documentation'] = doc + "[From File](" + uri.toString() + ")"
+				}
+				
+				addToexpression_tokens(
+					{
+						"mcodes": [item1]
+					}
+					, true)
+			}
+		} catch (error) {
+			vscode.window.showErrorMessage(error.message + ' on Analyzing file ' + uri.path)
+		}
+	
+	}
+
+	async function updateTokensFromWorkspace() {
+		var files = await vscode.workspace.findFiles("{**/*.txt,**/*.gcode}")
+		for (const file of files) {
+			const contents = await analyzeFile(file)
+			console.log(contents);
+		}
+	}
+
+	async function downloadPendingDocu() {
+		var changed=false
+		for (const section of sections) {
+			if (expression_tokens[section]) {
+				for (const element of expression_tokens[section]) {
+					try {
+						if (element.hasOwnProperty('docDownloadPending') && element['docDownloadPending']) {
+							var data = await downloadFile(context, element['docDownloadPending'])
+
+							if (data) {
+								var pageContent = reg_getDocuContent.exec(data)
+								if (pageContent && pageContent[1] && pageContent[1].length > 0) {
+									element['documentationHTML'] = pageContent[1].replace(reg_removeComment, '')
+								 	element['docDownloadPending'] = null
+								 }
+								changed = true
+							}
+						}
+					} catch (error) {
+						//vscode.window.showErrorMessage("Could not update Documentation for " + element['name'] )
+					}
+					
+				}
+			}
+		}
+
+		if (changed) {
+			await save_expression_tokens(context)
+			vscode.window.showInformationMessage("The Documentation has been updated.")
+		}
+	}
+
+	loadData(context)
+		.finally(() => initFileSystemWatcher())
+		.finally(() => updateTokensFromWorkspace())
+		.finally(() => downloadPendingDocu())
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('planetcnc-expression.update',
 			async function () {
-				vscode.window.showInformationMessage('Searching online for new Data');
+				vscode.window.showInformationMessage('Searching for new Data');
 				var changed = false;
 				var paramResult = await downloadParameters(context);
 				if (paramResult > 0) {
@@ -376,6 +668,8 @@ function activate(context) {
 				if (changed) {
 					await save_expression_tokens(context);
 				}
+
+				await downloadPendingDocu()
 			}
 		)
 	);
@@ -460,9 +754,9 @@ function activate(context) {
 					}
 					var sections = findTokens(expression_tokens['owords'], wordtrim, vscode.CompletionItemKind.Module);
 					sections.forEach(element => {
-						if (prepend) {
-							element.filterText = prepend + element.filterText;
-						}
+						// if (prepend) {
+						// 	element.filterText = prepend + element.filterText;
+						// }
 						element.range = range
 						result.push(element)
 					})
@@ -494,10 +788,10 @@ function activate(context) {
 
 					// Comments
 					var wordtrim = wordlc;
-					var prepend = '';
+					var prepend = ''
 					if (wordlc.startsWith("(")) {
 						wordtrim = wordlc.substring(1)
-						var prepend = '(';
+						prepend = '('
 					}
 					var sections = findTokens(expression_tokens['comments'], wordtrim, vscode.CompletionItemKind.Property)
 					sections.forEach(element => {
@@ -517,14 +811,13 @@ function activate(context) {
 						wordtrim = wordlc.substring(1)
 						prepend = '|'
 					}
-					var sections = findTokens(expression_tokens['parameters'], wordtrim, vscode.CompletionItemKind.Variable);
-					sections.forEach(element => {
+					var sections = findTokens(expression_tokens['parameters'], wordtrim, vscode.CompletionItemKind.Variable, null, prepend, '>');
+					for (const element of sections) {
 						element.range = range;
-						element.insertText = prepend + element.insertText + '>'
+						// element.insertText = prepend + element.insertText + '>'
 						element.filterText = prepend + element.filterText + '>'
 						result.push(element);
-					})
-
+					}
 					return result;
 				}
 			},
@@ -555,7 +848,7 @@ function activate(context) {
 						var wordtrim = word.replace(new RegExp('^<#|>$|\\|.*$', 'gm'), '');
 						var item = expression_tokens['parameters'].find(element => element['name'] == wordtrim)
 						if (item) {
-							return new vscode.Hover('<#' + item['name'] + '>:\n ' + item['detail'] + ' -- ' + item['documentation']);
+							return new vscode.Hover(item['name'] + "\n\n" + item['detail'] + ' -- ' + item['documentation']);
 						}
 						return new vscode.Hover('Custom global variable:  ' + word);
 
@@ -566,9 +859,6 @@ function activate(context) {
 							return new vscode.Hover('<#' + item['name'] + '>:\n ' + item['detail'] + ' -- ' + item['documentation']);
 						}
 						return new vscode.Hover('Custom local variable:  ' + word);
-
-
-
 
 					} else if (reg_GCode.test(word)) {
 						var wordtrim = word.replace(reg_GCodeNormalize, '');
@@ -631,240 +921,6 @@ function activate(context) {
 				}
 			}
 		));
-
-	function save_expression_tokens(context) {
-		var enc = new TextEncoder();
-		var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "expr_tokens.json");
-		return vscode.workspace.fs.writeFile(fileUri, enc.encode(JSON.stringify(expression_tokens)));
-
-	}
-
-	async function load_expression_tokens(context) {
-		var dec = new TextDecoder("utf-8");
-		try {
-			var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "expr_tokens.json");
-			await vscode.workspace.fs.stat(fileUri);
-			var value = await vscode.workspace.fs.readFile(fileUri)
-			var data = JSON.parse(dec.decode(value));
-			addToexpression_tokens(data);
-			return true
-		} catch (e) {
-			vscode.window.showInformationMessage('Could not load cache file.');
-			return false
-		}
-	}
-
-	function addToexpression_tokens(dataObject, force) {
-		const sections = [
-			'sections',
-			'functions',
-			'operators',
-			'parameters',
-			'gcodes',
-			'mcodes',
-			'macros',
-			'comments',
-			'owords'
-		]
-
-		
-		for (const section of sections) {
-			if (dataObject.hasOwnProperty(section)) {
-				for (const item of dataObject[section]) {
-					for (var i = 0; i < expression_tokens[section].length; i++){
-						var item2 = expression_tokens[section][i]
-						
-						if (item.hasOwnProperty('isFromFile')) {
-							if (item2['isFromFile'] == item['isFromFile']) {
-								if (force) {
-									expression_tokens[section][i] = item
-								}
-								return
-							}
-						} else {
-							if (item2['name'] == item['name']) {
-								if (force) {
-									expression_tokens[section][i] = item
-								}
-								return
-							}
-						}
-					}
-					expression_tokens[section].push(item);
-				}
-			}
-		}
-		
-
-		// if (dataObject.hasOwnProperty('functions')) {
-		// 	dataObject["functions"].forEach(element => {
-		// 		if (!expression_tokens['functions'].some(el => el.name == element[1])) {
-		// 			expression_tokens["functions"].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('operators')) {
-		// 	dataObject["operators"].forEach(element => {
-		// 		if (!expression_tokens['operators'].some(el => el.name == element[1])) {
-		// 			expression_tokens["operators"].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('parameters')) {
-		// 	dataObject["parameters"].forEach(element => {
-		// 		if (!expression_tokens['parameters'].some(el => el.name == element[1])) {
-		// 			expression_tokens["parameters"].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('gcodes')) {
-		// 	dataObject["gcodes"].forEach(element => {
-		// 		if (!expression_tokens['gcodes'].some(el => el.name == element[1])) {
-		// 			expression_tokens["gcodes"].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('mcodes')) {
-		// 	dataObject["mcodes"].forEach(element => {
-		// 		if (!expression_tokens['mcodes'].some(el => el.name == element[1])) {
-		// 			expression_tokens["mcodes"].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('macros')) {
-		// 	dataObject["macros"].forEach(element => {
-		// 		if (!expression_tokens['macros'].some(el => el.name == element[1])) {
-		// 			expression_tokens['macros'].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('comments')) {
-		// 	dataObject["comments"].forEach(element => {
-		// 		if (!expression_tokens['comments'].some(el => el.name == element[1])) {
-		// 			expression_tokens['comments'].push(element);
-		// 		}
-		// 	});
-		// }
-		// if (dataObject.hasOwnProperty('owords')) {
-		// 	dataObject['owords'].forEach(element => {
-		// 		if (!expression_tokens['owords'].some(el => el.name == element[1])) {
-		// 			expression_tokens['owords'].push(element);
-		// 		}
-		// 	});
-		// }
-	}
-
-
-	function findTokens(list, token, kind, regToApply) {
-		var result = [];
-		var tokenLow = token.toLowerCase();
-		if (regToApply) {
-			tokenLow = tokenLow.replace(regToApply, '');
-		}
-
-		list.forEach(element => {
-			try {
-				if (!element.hasOwnProperty('name')) {
-					return;
-				}
-				var name = element['name'].toLowerCase();
-				if (regToApply) {
-					name = name.replace(regToApply, '');
-				}
-				if (token == '' || name.includes(tokenLow)) {
-					var item
-					if (element['label']) {
-						item = new vscode.CompletionItem(element['label'], kind);
-					} else {
-						item = new vscode.CompletionItem(element['name'], kind);
-					}
-					item.filterText = element['name'];
-					if (element['detail']) {
-						item.detail = element['detail']
-					}
-
-					if (element['documentation']) {
-						item.documentation = new vscode.MarkdownString( element['documentation'])
-					}
-
-					if (element['snippet']) {
-						item.insertText = new vscode.SnippetString(element['snippet']);
-					} else if (element['insertText']) {
-						item.insertText = element['insertText'];
-					} else {
-						item.insertText = element['name'] + "("
-					}
-
-					result.push(item);
-				}
-			} catch (error) {
-				vscode.window.showErrorMessage(error.message);
-			}
-		})
-		return result;
-	}
-
-	function removeAnalyzedFile(uri) {
-		var match = uri.path.match(reg_fileTypeMCode)
-		if (match.groups['mcode']) {
-			for (let x = 0; x < expression_tokens['mcode'].length; x++) {
-				const element = expression_tokens['mcode'][x];
-				if (element['isFromFile'] == uri.path) {
-					delete expression_tokens['mcode'][x];
-					break
-				}
-			}
-		}
-
-		return Promise.resolve();
-	}
-
-	async function analyzeFile(uri) {
-		var match = uri.path.match(reg_fileTypeMCode)
-		if (match && match.groups['mcode']) {
-			var dec = new TextDecoder("utf-8");
-			var txt = dec.decode(await vscode.workspace.fs.readFile(uri))
-			var label = ''
-			var doc = ''
-			
-			if (txt) {
-				var nameArrayResult = reg_commentName.exec(txt)
-
-				if (nameArrayResult && nameArrayResult.length == 2) {
-					label = nameArrayResult[1]
-				}
-
-				var docMatch = txt.match(reg_docFileArea)
-				if (docMatch) {
-					doc = docMatch[0].replace(';', "  \n")
-				}
-			
-			}
-
-			var item = {
-				'name': match.groups['mcode'],
-				'insertText': match.groups['mcode'],
-				'label': match.groups['mcode'] + ' - ' + label,
-				'detail': label,
-				'documentation': doc + "\n## [From File](" +  uri.path + ")",
-				'isFromFile': uri.path
-			}
-
-			addToexpression_tokens(
-				{
-					"mcodes": [item]
-				}
-			, true)
-		}
-	}
-
-	async function updateTokensFromWorkspace() {
-		var files = await vscode.workspace.findFiles("{**/*.txt,**/*.gcode}")
-		for (const file of files) {
-			const contents = await analyzeFile(file)
-			console.log(contents);
-		}
-	}
 }
 
 async function deactivate() {
