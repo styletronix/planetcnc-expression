@@ -37,9 +37,10 @@ async function activate(context) {
 
 	const reg_WordBoundary = new RegExp("((?:_\\w+)|(?:#\\w+)|(?:\\w+)|(?:'[^']*')|(?:;[^\\n]*))");
 	//const reg_WordBoundary_Gcode = new RegExp("((?:/<#\\w+/|/>)|(?:O/<\\w*/>?)|(?:o/<\\w+/>)|(?:/<#\\.+?#/>)|(?:\\w+)|(?:'[^']*')|(?:;[^\\n]*))");
-	const reg_WordBoundary_Gcode = new RegExp('(\\(\\w*)|(#\\<_?\\w*\\|?>?)|(^\\s*O<)|(o\\<\\w+\\>)|(\\<#.+\\>?)|(\\b\\w+\\b)|(\'[^\']*\')|(;[^\\n]*)');
+	//const reg_WordBoundary_Gcode = new RegExp('(\\(\\w*)|(#\\<_?\\w*\\|?>?)|(^\\s*O<)|(o\\<\\w+\\>)|(\\<#.+\\>?)|(\\b\\w+\\b)|(\'[^\']*\')|(;[^\\n]*)');
+	const reg_WordBoundary_Gcode = new RegExp('(G[0-9]+\\.?[0-9]+)|([GM][0-9]+[^.])|(\\(.*,)|(;.*)|(#<\\w+(||>))|(o<\\w+>\\s*\\w+\\b)|(\\b\\w+\\b)', 'i')
 	const reg_GCode = new RegExp("\\b[G|M|g|m][0-9]+\\b");
-	const reg_GCodeNormalize = new RegExp('(?<=^[GM])0+(?=[0-9])|\\s+[^0-9]*$', 'ism');
+	const reg_GCodeNormalize = new RegExp('(?<=M)0*(?=[0-9]+)', 'i')
 	const reg_prefixString = new RegExp('(?<!#)<|\'', 'imsg')
 	const reg_fileTypeMCode = new RegExp('(?:scripts/)(?<mcode>M[0-9]+).gcode', 'i')
 	const reg_fileTypeMacro = new RegExp('(?:scripts/)(?<macro>o[0-9]+).gcode', 'i')
@@ -48,7 +49,8 @@ async function activate(context) {
 	const reg_scriptFileNameSplit = new RegExp('(?<base>.*\\/(?<profile>.*?))\\/(?<profilerelative>scripts\\/(?<filename>(?<id>[o|M][0-9]+).gcode))', 'mi')
 	//const reg_getDocuContent = new RegExp('-- wikipage start -->[\\n|\\s]*(.*?)[\\n|\\s]*<!-- wikipage stop --', 'is')
 	const reg_getDocuContent = new RegExp('(?<=<body>)(.*)*(?=<\\\/body)', 'is')
-	const reg_removeComment = new RegExp('(<!--.*?-->)','isg');
+	const reg_removeComment = new RegExp('(<!--.*?-->)', 'isg');
+	const reg_trimName = new RegExp('\s*-\s*.*', 'i');
 
 	function downloadFile(context, urlString) {
 		return new Promise((resolve, reject) => {
@@ -636,6 +638,50 @@ async function activate(context) {
 		}
 	}
 
+	function findHoverToken(word,type) {
+		var tokens = findTokensNormalized(word,type)
+		if (!tokens || tokens.length == 0)
+			return null
+		
+		var markdowns = []
+		for (const token of tokens) {
+			markdowns.push(tokenToMarkdown(token))
+		}
+		return new vscode.Hover(markdowns);
+}
+	function findTokensNormalized(word, type) {
+		var name = word.toLowerCase().replace(reg_GCodeNormalize,'')
+		var ret = []
+		for (const element of expression_tokens[type]) {
+			try {
+				var name2 = element['name'].replace(reg_trimName, '').replace(reg_GCodeNormalize, '')
+				name2=name2.trim()
+				if (name2.toLowerCase() == name) {
+					ret.push(element)
+				}
+			} catch (error) {
+				
+			}
+		}
+		return ret
+	}
+	function tokenToMarkdown(token) {
+		if (token['documentationHTML']) {
+			var hver = new vscode.MarkdownString(token['documentationHTML'])
+			hver.baseUri = vscode.Uri.parse(token['documentationBaseUrl'])
+			hver.supportHtml = true
+			return hver
+
+		} else if (token['documentation']) {
+			var hver = new vscode.MarkdownString(token['documentation'])
+			hver.baseUri = vscode.Uri.parse(token['documentationBaseUrl'])
+			return hver
+		} else {
+			var hver = new vscode.MarkdownString('###' + token['name'])
+			return hver
+		}
+	}
+
 	loadData(context)
 		.finally(() => initFileSystemWatcher())
 		.finally(() => updateTokensFromWorkspace())
@@ -832,43 +878,58 @@ async function activate(context) {
 			},
 			{
 				provideHover(document, position, token) {
+
 					var range = document.getWordRangeAtPosition(position, reg_WordBoundary_Gcode);
-					var word = document.getText(range);
+					var word = document.getText(range).trim();
 					// var textbefore = document.getText(
 					// 	new vscode.Range(
 					// 		new vscode.Position(range.start.line, 0), range.start))
 
 					if (word.startsWith(';')) {
+						// Comment
 						return new vscode.Hover('This is a comment.');
 
 					} else if (word.startsWith('\'')) {
+						// escaped string
 						return new vscode.Hover('This is a string');
+						
 
 					} else if (word.startsWith('<#_')) {
+						// Global Parameter
 						var wordtrim = word.replace(new RegExp('^<#|>$|\\|.*$', 'gm'), '');
-						var item = expression_tokens['parameters'].find(element => element['name'] == wordtrim)
-						if (item) {
-							return new vscode.Hover(item['name'] + "\n\n" + item['detail'] + ' -- ' + item['documentation']);
-						}
-						return new vscode.Hover('Custom global variable:  ' + word);
+						var hover = findHoverToken(wordtrim, 'parameters')
+						if (hover){ return hover}
+						return new vscode.Hover('Custom global variable:  ' + wordtrim);
+
+					} else if (word.startsWith('(')) {
+						// Comment function
+						var wordtrim = word.replace(new RegExp('\(', 'i'), '');
+						var hover = findHoverToken(wordtrim, 'comments')
+						if (hover) { return hover }
 
 					} else if (word.startsWith('<#')) {
+						// Local Parameter
 						var wordtrim = word.replace(new RegExp('^<#|>$|\\|.*$', 'igm'), '');
-						var item = expression_tokens['parameters'].find(element => element['name'] == word)
-						if (item) {
-							return new vscode.Hover('<#' + item['name'] + '>:\n ' + item['detail'] + ' -- ' + item['documentation']);
-						}
+						var hover = findHoverToken(wordtrim,'parameters')
+						if (hover) { return hover }
 						return new vscode.Hover('Custom local variable:  ' + word);
 
 					} else if (reg_GCode.test(word)) {
 						var wordtrim = word.replace(reg_GCodeNormalize, '');
-						var item = expression_tokens['gcodes'].find(element => element['name'].replace(reg_GCodeNormalize, '') == wordtrim)
-						if (item) {
-							return new vscode.Hover(wordtrim + ":\n\n" + item['detail'] + "\n\n" + item['documentation'].replaceAll("\n", "\n\n"));
+						if (wordtrim.toLowerCase().startsWith('g')){
+							var hover = findHoverToken(wordtrim, 'gcodes')
+						} else {
+							var hover = findHoverToken(wordtrim, 'mcodes')
 						}
+						if (hover) { return hover }
 
 					} else {
-						return new vscode.Hover('This could be a function, local variable, static number or operator: ' + word);
+						var hover = findHoverToken(wordtrim, 'functions')
+						if (hover) { return hover }
+
+						var hover = findHoverToken(wordtrim, 'operators')
+						if (hover) { return hover }
+
 					}
 				}
 			}
