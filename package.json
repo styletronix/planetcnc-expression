@@ -52,9 +52,9 @@
         "path": "./syntaxes/planetcncexpr.tmLanguage.json"
       },
       {
-        "language": "planetcncexpr",
-        "scopeName": "source.expression",
-        "path": "./syntaxes/planetcncexpr.tmLanguage.json"
+        "language": "planetcncgcode",
+        "scopeName": "source.gcode",
+        "path": "./syntaxes/planetcncgcode.tmLanguage.json"
       }
     ]
   },

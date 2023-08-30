@@ -16,13 +16,14 @@ async function activate(context) {
 		"comments": [],
 		"owords": [],
 		"macros": []
-	};
+	}
 
-	const fs = require('fs/promises');
-	const parametersUrl = 'https://cnc.zone/tng/parameters/parameters';
-	const gcodeUrl = 'https://cnc.zone/gcode/gcodes/gcodes';
-	const mcodeUrl = 'https://cnc.zone/gcode/mcodes/mcodes';
+	const fs = require('fs/promises')
+	const parametersUrl = 'https://cnc.zone/tng/parameters/parameters'
+	const gcodeUrl = 'https://cnc.zone/gcode/gcodes/gcodes'
+	const mcodeUrl = 'https://cnc.zone/gcode/mcodes/mcodes'
 	const macrosUrl = 'https://cnc.zone/gcode/macros/macros'
+	const commentsUrl = 'https://cnc.zone/gcode/comments/comments'
 	const sections = [
 		'sections',
 		'functions',
@@ -51,6 +52,7 @@ async function activate(context) {
 	const reg_getDocuContent = new RegExp('(?<=<body>)(.*)*(?=<\\\/body)', 'is')
 	const reg_removeComment = new RegExp('(<!--.*?-->)', 'isg');
 	const reg_trimName = new RegExp('\s*-\s*.*', 'i');
+	const reg_prefix_G65 = new RegExp('\\bG65\\s*', 'i');
 
 	function downloadFile(context, urlString) {
 		return new Promise((resolve, reject) => {
@@ -120,6 +122,67 @@ async function activate(context) {
 				})
 		})
 	};
+	function downloadcomments(context, force) {
+		return new Promise((resolve, reject) => {
+			downloadFile(context, commentsUrl)
+				.then(dat => {
+					var ret = parseCommentsHtml(dat, context, force);
+					resolve(ret);
+				})
+				.catch(error => {
+					reject(error)
+				})
+		})
+	}
+	function parseCommentsHtml(data, context, force) {
+		var regexp = new RegExp('href="(?<url>.*?)".*?data-wiki-id="gcode:comments:comment-\\w+">(?<caption>\\w+)<', 'igm')
+		var regexResult = [...data.matchAll(regexp)]
+		var type = 'comments'
+		var count = 0
+
+		regexResult.forEach(element => {
+			var found = false
+			var tokenfound
+			var id = element['groups']['caption'] //+ ' - ' + element['groups']['detail']
+
+			for (let X = 0; X < expression_tokens[type].length; X++) {
+				const element2 = expression_tokens[type][X];
+				if (element2['name'] == id) {
+					found = true
+					tokenfound = element2
+					return
+				}
+			}
+
+			if (force || !found) {
+				var token
+				if (found) {
+					token = tokenfound
+				} else {
+					token = {
+						"name": id
+					}
+				}
+				token["insertText"] = element['groups']['gcode']
+				token["detail"] = element['groups']['detail']
+				token["label"] = element['groups']['gcode'] + ' - ' + element['groups']['detail']
+
+				if (element['groups']['url']) {
+					token['documentation'] = "[Documentation](" + 'https://cnc.zone' + element['groups']['url'] + ")"
+					token["docDownloadPending"] = 'https://cnc.zone/_export/xhtml' + element['groups']['url']
+					token["documentationUrl"] = 'https://cnc.zone' + element['groups']['url']
+					token["documentationBaseUrl"] = 'https://cnc.zone/'
+				}
+
+				if (!found) {
+					expression_tokens[type].push(token)
+				}
+				count++;
+			}
+		})
+
+		return count
+	}
 	function parseMacrosHtml(data, context, force) {
 		var regexp = new RegExp('href=\\"(?<url>.*?)\\"(?:.*?data-wiki-id=\\"gcode:(?:mcodes|gcodes|macros):(?:mcode|gcode|macro)-.*\\"\\>)(?<gcode>[G|M|o|0-9/.]+)\\s-\\s(?<detail>.*)</a>', 'gmi')
 		var regexResult = [...data.matchAll(regexp)]
@@ -167,7 +230,6 @@ async function activate(context) {
 			}
 		})
 
-		vscode.window.showInformationMessage(count + ' new Macros imported');
 		return count
 	}
 	function parseMCodeHtml(data, context, force) {
@@ -221,8 +283,6 @@ async function activate(context) {
 				count++;
 			}
 		})
-
-		vscode.window.showInformationMessage(count + ' new MCodes imported');
 		return count
 	}
 	function parseGCodeHtml(data, context, force) {
@@ -277,7 +337,6 @@ async function activate(context) {
 			}
 		})
 
-		vscode.window.showInformationMessage(count + ' new GCodes imported');
 		return count
 	}
 	function parseParameterHtml(data, context, force) {
@@ -323,7 +382,6 @@ async function activate(context) {
 			}
 		})
 
-		vscode.window.showInformationMessage(count + ' new Parameters imported');
 		return count
 	}
 
@@ -606,13 +664,48 @@ async function activate(context) {
 		}
 	}
 
-	async function downloadPendingDocu() {
-		var changed=false
+	function downloadPendingDocu() {
+		return vscode.window.withProgress({
+			location: vscode.ProgressLocation.Notification,
+			title: "Downloading Documentation",
+			cancellable: true
+		}, downloadPendingDocu_task)
+	}
+
+	/**
+	 * @param {{ report: (arg0: { increment: number; message?: string; }) => void; }} progress
+	 * @param {{ onCancellationRequested: (arg0: () => boolean) => void; }} token
+	 */
+	async function downloadPendingDocu_task(progress, token) {
+		progress.report({
+			increment: 0,
+			message: "Downloading Documentation"
+		});
+
+		var changed = false
+		var count_total = 0
+		var count_current = 0
+		for (const section of sections) {
+			if (expression_tokens[section]) { 
+				for (const element of expression_tokens[section]) { 
+					token.onCancellationRequested(() => { return false })
+					if (element.hasOwnProperty('docDownloadPending') && element['docDownloadPending']) {
+						count_total += 1
+					}
+				}
+			}
+		}
+
 		for (const section of sections) {
 			if (expression_tokens[section]) {
 				for (const element of expression_tokens[section]) {
+					token.onCancellationRequested(() => { return false })
 					try {
 						if (element.hasOwnProperty('docDownloadPending') && element['docDownloadPending']) {
+							count_current += 1
+							progress.report({
+								increment: count_current / count_total * 100
+							})
 							var data = await downloadFile(context, element['docDownloadPending'])
 
 							if (data) {
@@ -638,6 +731,10 @@ async function activate(context) {
 		}
 	}
 
+	/**
+	 * @param {string} word
+	 * @param {string} type
+	 */
 	function findHoverToken(word,type) {
 		var tokens = findTokensNormalized(word,type)
 		if (!tokens || tokens.length == 0)
@@ -649,6 +746,10 @@ async function activate(context) {
 		}
 		return new vscode.Hover(markdowns);
 }
+	/**
+	 * @param {string} word
+	 * @param {string} type
+	 */
 	function findTokensNormalized(word, type) {
 		var name = word.toLowerCase().replace(reg_GCodeNormalize,'')
 		var ret = []
@@ -665,6 +766,9 @@ async function activate(context) {
 		}
 		return ret
 	}
+	/**
+	 * @param {{ [x: string]: string; }} token
+	 */
 	function tokenToMarkdown(token) {
 		if (token['documentationHTML']) {
 			var hver = new vscode.MarkdownString(token['documentationHTML'])
@@ -690,30 +794,64 @@ async function activate(context) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('planetcnc-expression.update',
 			async function () {
-				vscode.window.showInformationMessage('Searching for new Data');
-				var changed = false;
-				var paramResult = await downloadParameters(context);
-				if (paramResult > 0) {
-					changed = true;
-				}
-				var gCodeResult = await downloadGcode(context)
-				if (gCodeResult > 0) {
-					changed = true;
-				}
+				await vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: "Searching for new Data",
+					cancellable: true
+				}, async (progress, token) => {
+					token.onCancellationRequested(() => { return false })
+					progress.report({increment: 0})
 
-				var mCodeResult = await downloadMcode(context)
-				if (mCodeResult > 0) {
-					changed = true;
-				}
+					var changed = false;
+					var paramResult = await downloadParameters(context);
+					if (paramResult > 0) {
+						changed = true;
+					}
 
-				var macrosResult = await downloadmacros(context)
-				if (macrosResult > 0) {
-					changed = true;
-				}
+					token.onCancellationRequested(() => { return false })
+					progress.report({ increment: 20 })
 
-				if (changed) {
-					await save_expression_tokens(context);
-				}
+					var gCodeResult = await downloadGcode(context)
+					if (gCodeResult > 0) {
+						changed = true;
+					}
+
+					token.onCancellationRequested(() => { return false })
+					progress.report({ increment: 40 })
+
+					var mCodeResult = await downloadMcode(context)
+					if (mCodeResult > 0) {
+						changed = true;
+					}
+
+					token.onCancellationRequested(() => { return false })
+					progress.report({ increment:60 })
+
+					var macrosResult = await downloadmacros(context)
+					if (macrosResult > 0) {
+						changed = true;
+					}
+
+					token.onCancellationRequested(() => { return false })
+					progress.report({ increment: 80 })
+
+					var commentsResult = await downloadcomments(context)
+					if (commentsResult > 0) {
+						changed = true;
+					}
+
+					token.onCancellationRequested(() => { return false })
+					progress.report({ increment: 99 })
+
+					if (changed) {
+						await save_expression_tokens(context);
+						vscode.window.showInformationMessage("New data has been downloaded")
+					} else {
+						vscode.window.showInformationMessage("You are using the most recend definitions")
+					}
+
+					progress.report({ increment: 100 })
+				})
 
 				await downloadPendingDocu()
 			}
@@ -831,7 +969,6 @@ async function activate(context) {
 						}
 					})
 
-
 					// Comments
 					var wordtrim = wordlc;
 					var prepend = ''
@@ -881,9 +1018,10 @@ async function activate(context) {
 
 					var range = document.getWordRangeAtPosition(position, reg_WordBoundary_Gcode);
 					var word = document.getText(range).trim();
-					// var textbefore = document.getText(
-					// 	new vscode.Range(
-					// 		new vscode.Position(range.start.line, 0), range.start))
+					var textbefore = document.getText(
+					new vscode.Range(
+						new vscode.Position(range.start.line, 0), range.start)
+					)
 
 					if (word.startsWith(';')) {
 						// Comment
@@ -893,23 +1031,32 @@ async function activate(context) {
 						// escaped string
 						return new vscode.Hover('This is a string');
 						
+					} else if (word.startsWith('P') && textbefore.match(reg_prefix_G65)) {
+						// Macro call function
+						var wordmatch = word.match(new RegExp('(?:P)([0-9]+)\\b', 'i'));
+						if (wordmatch) {
+							var hover = findHoverToken('o' + wordmatch[1], 'macros')
+							if (hover) { return hover }
+						} 
+						
 
-					} else if (word.startsWith('<#_')) {
+					} else if (word.startsWith('#<_')) {
 						// Global Parameter
-						var wordtrim = word.replace(new RegExp('^<#|>$|\\|.*$', 'gm'), '');
+						var wordtrim = word.replace(new RegExp('^#<|>$|\\|.*$', 'gm'), '');
 						var hover = findHoverToken(wordtrim, 'parameters')
 						if (hover){ return hover}
 						return new vscode.Hover('Custom global variable:  ' + wordtrim);
 
 					} else if (word.startsWith('(')) {
 						// Comment function
-						var wordtrim = word.replace(new RegExp('\(', 'i'), '');
+						var wordtrim = word.replace(new RegExp('[\\(|,]*', 'i'), '');
+						var wordtrim = wordtrim.replace(new RegExp(',', 'i'), '');
 						var hover = findHoverToken(wordtrim, 'comments')
 						if (hover) { return hover }
 
-					} else if (word.startsWith('<#')) {
+					} else if (word.startsWith('#<')) {
 						// Local Parameter
-						var wordtrim = word.replace(new RegExp('^<#|>$|\\|.*$', 'igm'), '');
+						var wordtrim = word.replace(new RegExp('^#<|>$|\\|.*$', 'igm'), '');
 						var hover = findHoverToken(wordtrim,'parameters')
 						if (hover) { return hover }
 						return new vscode.Hover('Custom local variable:  ' + word);

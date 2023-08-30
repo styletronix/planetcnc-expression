@@ -1,0 +1,252 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "PlanetCNC GCode",
+	"scopeName": "source.gcode",
+	"patterns": [
+		{
+			"include": "#owords"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#expressions"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#parameters"
+		},
+		{
+			"include": "#gmcodes"
+		},
+		{
+			"include": "#gmcodeparams"
+		}
+	],
+	"repository": {
+		"owords": {
+			"patterns": [
+				{
+					"name": "entity.name.class",
+					"begin": "(?i)o<(.*?)>\\s*(if|do)",
+					"end": "(?i)o<\\1>\\s*(endif|while)",
+					"patterns": [
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#functions"
+						},
+						{
+							"include": "#expressions"
+						},
+						{
+							"include": "$self"
+						},
+						{
+							"include": "#gmcodes"
+						}
+					]
+				}
+			]
+		},
+		"parameters": {
+			"patterns": [
+				{
+					"name": "variable",
+					"begin": "#<",
+					"end": ">",
+					"patterns": [
+						{
+							"name": "variable.name",
+							"match": "[^#<>]*"
+						}
+					]
+				}
+			]
+		},
+		"functions": {
+			"patterns": [
+				{
+					"name": "support.function",
+					"begin": "\\(",
+					"end": "\\)",
+					"patterns": [
+						{
+							"match": ",\\s*\\w+\\s*,",
+							"name": "entity.name.selector",
+							"patterns": [
+								{
+									"include": "#commands"
+								}
+							]
+						},
+						{
+							"match": "(?<!,)\\w+?\\s*(?=,)",
+							"name": "support.property-value"
+						},
+						{
+							"match": ".*",
+							"name": "keyword.other",
+							"patterns": [
+								{
+									"include": "#variable"
+								},
+								{
+									"include": "#expressions"
+								},
+								{
+									"include": "#numeric"
+								},
+								{
+									"include": "#strings"
+								},
+								{
+									"include": "#gmcodes"
+								}
+							]
+						},
+						{
+							"include": "#variable"
+						},
+						{
+							"include": "#expressions"
+						},
+						{
+							"include": "#numeric"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#gmcodes"
+						}
+					]
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line",
+					"match": ";.+$"
+				}
+			]
+		},
+		"expressions": {
+			"patterns": [
+				{
+					"name": "support.function",
+					"begin": "\\b\\w+\\[",
+					"end": "\\]",
+					"patterns": [
+						{
+							"include": "$self"
+						},
+						{
+							"include": "#functions"
+						},
+						{
+							"include": "#parameters"
+						},
+						{
+							"include": "#numeric"
+						},
+						{
+							"include": "#strings"
+						}
+					]
+				},
+				{
+					"name": "support.function",
+					"begin": "\\[",
+					"end": "\\]",
+					"patterns": [
+						{
+							"include": "$self"
+						},
+						{
+							"include": "#functions"
+						},
+						{
+							"include": "#parameters"
+						},
+						{
+							"include": "#numeric"
+						},
+						{
+							"include": "#strings"
+						}
+					]
+				}
+			]
+		},
+		"numeric": {
+			"patterns": [
+				{
+					"name": "constant.numeric",
+					"match": "(?i)\\b(nan|pi|e)\\b"
+				},
+				{
+					"name": "constant.numeric",
+					"match": "[+|-]?[0-9]?\\.?[0-9]+"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.single",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape",
+					"match": "[^']*"
+				}
+			]
+		},
+		"gmcodes": {
+			"patterns": [
+				{
+					"name": "entity.name.type",
+					"match": "(?i)\\bG[-0-9.]+((?<![A-Z])[A-FH-Z][-0-9.]+)*"
+				},
+				{
+					"name": "constant.language",
+					"match": "(?i)\\bM[-0-9.]+((?<![A-Z])[A-FH-Z][-0-9.]+)*",
+					"patterns": [
+						{
+							"include": "#gmcodeparams"
+						}
+					]
+				}
+			]
+		},
+		"gmcodeparams": {
+			"patterns": [
+				{
+					"name": "entity.name.tag",
+					"begin": "(?i)((?!<[A-Z]+)[A-FH-Z])",
+					"end": "[A-Z]|\\b",
+					"patterns": [
+						{
+							"include": "#numeric"
+						},
+						{
+							"include": "#parameters"
+						}
+					]
+				}
+			]
+		},
+		"commands": {
+			"patterns": [
+				{
+					"name": "entity.other.inherited-class",
+					"match": "(?i)cmd_\\w+"
+				}
+			]
+		}
+	}
+}
