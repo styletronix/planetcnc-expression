@@ -1,0 +1,58 @@
+[
+	{
+		"url": "https://cnc.zone/_export/xhtml/tng/parameters/parameters",
+		"type": "parameters",
+		"regex": "href=\"(?<url>.*?)\"(?:.*?data-wiki-id=\"tng:parameters:param-.*\"\\>)(?<caption>\\w+?)(\\s-\\s(?<detail>.*?))?<",
+		"regexold": "(?:data-wiki-id=\"tng:parameters:param.*?\\>)(?<caption>_\\w+)",
+		"regexMod": "igm",
+		"docDownloadUrlPrefix": "https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	},
+	{
+		"url": "https://cnc.zone/_export/xhtml/gcode/gcodes/gcodes",
+		"type": "gcodes",
+		"regex": "href=\"(?<url>.*?)\"(?:.*?data-wiki-id=\"gcode:gcodes:gcode-.*\"\\>)(?<caption>[G|M|0-9/.]+)(\\s-\\s(?<detail>.*?))?<",
+		"regexMod": "igm",
+		"docDownloadUrlPrefix": "https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	},
+	{
+		"url": "https://cnc.zone/_export/xhtml/gcode/mcodes/mcodes",
+		"type": "mcodes",
+		"regex": "href=\"(?<url>.*?)\"(?:.*?data-wiki-id=\".*?\">)(?<caption>[G|M|0-9/.]+)(\\s-\\s(?<detail>.*?))?<",
+		"regexMod": "igm",
+		"docDownloadUrlPrefix": "https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	},
+	{
+		"url": "https://cnc.zone/_export/xhtml/gcode/macros/macros",
+		"type": "macros",
+		"regex": "href=\"(?<url>.*?)\"(?:.*?data-wiki-id=\".*?\">)(?<caption>[G|M|o|0-9/.]+)(\\s-\\s(?<detail>.*?))?<",
+		"regexMod": "igm",
+		"docDownloadUrlPrefix": "https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	},
+	{
+		"url": "https://cnc.zone/_export/xhtml/gcode/comments/comments",
+		"type": "comments",
+		"regex": "href=\"(?<url>.*?)\".*?data-wiki-id=\".*?\">(?<caption>\\w+)(\\s-\\s(?<detail>.*?))?<",
+		"regexMod": "igm",
+		"docDownloadUrlPrefix": "https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	},{
+		"url":"https://cnc.zone/_export/xhtml/expr/events/events",
+		"type":"events",
+		"regex":"href=\"(?<url>.*?)\".*?data-wiki-id=\".*?\">(?<caption>.*?)(\\s+-\\s+(?<detail>.*?))?<",
+		"regexMod":"igm",
+		"docDownloadUrlPrefix":"https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	},
+	{
+		"url": "https://cnc.zone/_export/xhtml/expr/functions/functions",
+		"type": "functions",
+		"regex": "href=\"(?<url>.*?)\".*?data-wiki-id=\".*?\">(?<caption>.*?)(\\s+-\\s+(?<detail>.*?))?<",
+		"regexMod": "igm",
+		"docDownloadUrlPrefix": "https://cnc.zone/_export/xhtml",
+		"docBaseUrl": "https://cnc.zone"
+	}
+]
