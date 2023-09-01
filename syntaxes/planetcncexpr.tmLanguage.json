@@ -14,7 +14,7 @@
 		"sections": {
 			"patterns": [
 				{
-					"name": "entity.name.namespace",
+					"name": "meta",
 					"begin": "(?:^\\s*)#(Loop|Loop5|Loop15|Loop60|Loop300|OnInit|OnShutdown|OnStart|OnEnd|OnPause|OnStop|OnEStop|OnJog|OnWheel|OnCmd)\\s*$",
 					"end": "^\\s*(?=#|\\z)", 
 					"patterns": [
@@ -24,7 +24,7 @@
 					]
 				},
 				{
-					"name": "entity.name.function",
+					"name": "meta.type.name",
 					"begin": "^\\s*(#\\w+)\\b\\s*$",
 					"end": "^\\s*(?=#|\\z)",
 					"patterns": [
@@ -44,7 +44,7 @@
 			]
 		},
 		"functions": {
-			"name": "entity.name",
+			"name": "keyword.control.loop",
 			"patterns": [
 				{
 					"name": "entity.name.function",
@@ -116,12 +116,12 @@
 			]
 		},
 		"strings": {
-			"name": "string.quoted.single",
+			"name": "string.quoted",
 			"begin": "'",
 			"end": "'",
 			"patterns": [
 				{
-					"name": "constant.character.escape",
+					"name": "string.quoted.single",
 					"match": "[^']*"
 				}
 			]
@@ -129,7 +129,7 @@
 		"variables": {
 			"patterns": [
 				{
-					"name": "variable.name",
+					"name": "meta.parameter.type.variable",
 					"match": "(?i)_(\\w|_)+"
 				},
 				{

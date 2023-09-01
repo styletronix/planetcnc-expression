@@ -21,8 +21,14 @@
     "commands": [
       {
         "command": "planetcnc-expression.update",
-        "title": "PlanetCNC: Download new language data"
-      }
+        "title": "PlanetCNC: Download new language data only",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "planetcnc-expression.updateforced",
+        "title": "PlanetCNC: Download all language data again",
+        "icon":"$(cloud-download)" 
+       }
     ],
     "languages": [
       {
