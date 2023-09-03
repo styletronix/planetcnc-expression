@@ -30,8 +30,17 @@
 			"patterns": [
 				{
 					"name": "entity.name.class",
-					"begin": "(?i)o<(.*?)>\\s*(if|do)",
-					"end": "(?i)o<\\1>\\s*(endif|while)",
+					"begin": "(?i)(o\\<.*?\\>)\\s*(\\w+)",
+					"while": "(?i)(o\\<\\1\\>)\\s*(\\w+)",
+					"end": "(?i)(o\\<\\1\\>)\\s*(\\w+)",
+					"captures": {
+						"1": {
+							"name": "variable.language"
+						},
+						"2": {
+							"name": "markup.bold"
+						}
+					},
 					"patterns": [
 						{
 							"include": "#comments"
@@ -139,7 +148,7 @@
 			"patterns": [
 				{
 					"name": "support.function",
-					"begin": "\\b\\w+\\[",
+					"begin": "\\w+\\[",
 					"end": "\\]",
 					"patterns": [
 						{
@@ -162,6 +171,7 @@
 				{
 					"name": "support.function",
 					"begin": "\\[",
+					"captures": {"0":{"name":"token.warn-token"}},
 					"end": "\\]",
 					"patterns": [
 						{
@@ -213,7 +223,7 @@
 					"match": "(?i)\\bG[-0-9.]+((?<![A-Z])[A-FH-Z][-0-9.]+)*"
 				},
 				{
-					"name": "constant.language",
+					"name": "keyword.other.unit",
 					"match": "(?i)\\bM[-0-9.]+((?<![A-Z])[A-FH-Z][-0-9.]+)*",
 					"patterns": [
 						{

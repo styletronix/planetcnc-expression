@@ -33,7 +33,7 @@ async function activate(context) {
 	const reg_fileTypeMacro = new RegExp('(?:scripts/)(?<macro>o[0-9]+).gcode', 'i')
 	const reg_fileTypeParameters = new RegExp('(?:/)(?<filename>Parameters.txt)', 'i')
 	const reg_commentName = new RegExp('\\(name\\s*,\\s*\'?(?<name>.*?)\'?\\)', 'i')
-	const reg_docFileArea = new RegExp(';[\\s\\S]*?(?:^([^;])|\\z)', 'im')
+	const reg_docFileArea = new RegExp(';(.*?)(?=^[^;])', 'ims')
 	const reg_scriptFileNameSplit = new RegExp('(?<base>.*\\/(?<profile>.*?))\\/(?<profilerelative>scripts\\/(?<filename>(?<id>[o|M][0-9]+).gcode))', 'mi')
 	const reg_getDocuContent = new RegExp('(?:.*-- wikipage start -->[\\n|\\s]*|<body>[\\n|\\s]*)(?<content>.*?)(?:<!-- wikipage stop|<\\\/body>)', 'is')
 	const reg_removeComment = new RegExp('(<!--.*?-->)', 'isg');
@@ -62,7 +62,7 @@ async function activate(context) {
 	}
 
 	async function updateTokens(force, progress, canceltoken) {
-		var txt = await fs.readFile(context.extensionPath + '\\docUrl.json', 'utf8')
+		var txt = await fs.readFile(context.extensionPath + '\\grammars\\docUrl.json', 'utf8')
 		var list = JSON.parse(txt)
 		var count = 0;
 		var countTotal = list.length
@@ -97,55 +97,57 @@ async function activate(context) {
 				var tokenfound
 
 				var id = element['groups']['caption']
-				if (element['groups']['detail']) {
-					id = id + ' - ' + element['groups']['detail']
-				}
-
-				for (let X = 0; X < expression_tokens[type].length; X++) {
-					const element2 = expression_tokens[type][X];
-					if (element2['name'] == id) {
-						found = true
-						tokenfound = element2
-						return
+				if (id) {
+					if (element['groups']['detail']) {
+						id = id + ' - ' + element['groups']['detail']
 					}
-				}
 
-				if (force || !found) {
-					var token
-					if (found) {
-						token = tokenfound
-					} else {
-						token = {
-							"name": id
+					for (let X = 0; X < expression_tokens[type].length; X++) {
+						const element2 = expression_tokens[type][X];
+						if (element2['name'] == id) {
+							found = true
+							tokenfound = element2
+							return
 						}
 					}
 
-					var snippetstring = element['groups']['caption']
-					if (snippetstring.endsWith("()")) {
-						snippetstring = snippetstring.substring(0, snippetstring.length - 2) + "($1)"
+					if (force || !found) {
+						var token
+						if (found) {
+							token = tokenfound
+						} else {
+							token = {
+								"name": id
+							}
+						}
 
+						var snippetstring = element['groups']['caption']
+						if (snippetstring.endsWith("()")) {
+							snippetstring = snippetstring.substring(0, snippetstring.length - 2) + "($1)"
+
+						}
+
+						token["insertText"] = snippetstring
+
+						if (element['groups']['detail']) {
+							token["detail"] = element['groups']['detail']
+						}
+
+						if (element['groups']['url']) {
+							token['documentation'] = "[Documentation](" + tokenOptions['docBaseUrl'] + element['groups']['url'] + ")"
+							token["docDownloadPending"] = tokenOptions['docDownloadUrlPrefix'] + element['groups']['url']
+							token["documentationUrl"] = token["docDownloadPending"]
+							token["documentationBaseUrl"] = tokenOptions['docBaseUrl']
+						}
+
+						if (!found) {
+							expression_tokens[type].push(token)
+						}
+						count++;
 					}
-
-					token["insertText"] = snippetstring
-
-					if (element['groups']['detail']) {
-						token["detail"] = element['groups']['detail']
-					}
-
-					if (element['groups']['url']) {
-						token['documentation'] = "[Documentation](" + tokenOptions['docBaseUrl'] + element['groups']['url'] + ")"
-						token["docDownloadPending"] = tokenOptions['docDownloadUrlPrefix'] + element['groups']['url']
-						token["documentationUrl"] = token["docDownloadPending"]
-						token["documentationBaseUrl"] = tokenOptions['docBaseUrl']
-					}
-
-					if (!found) {
-						expression_tokens[type].push(token)
-					}
-					count++;
 				}
 			} catch (error) {
-
+				console.log("Error during parseHtmlFile: " + error.message)
 			}
 		})
 
@@ -154,9 +156,9 @@ async function activate(context) {
 
 	async function loadData(context) {
 		try {
-			var cacheLoaded = await load_expression_tokens(context)
+			var cacheLoaded = await load_tokens(context)
 			if (!cacheLoaded) {
-				var result = await fs.readFile(context.extensionPath + '\\syntaxes\\expr_tokens.json', 'utf8')
+				var result = await fs.readFile(context.extensionPath + '\\grammars\\tokens.json', 'utf8')
 				addToexpression_tokens(JSON.parse(result));
 			}
 		} catch (error) {
@@ -190,7 +192,7 @@ async function activate(context) {
 
 	function save_expression_tokens(context) {
 		var enc = new TextEncoder();
-		var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "expr_tokens.json");
+		var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "tokens.json");
 
 		var expressionsFiltered = {}
 		for (const [key, value] of Object.entries(expression_tokens)) {
@@ -205,17 +207,24 @@ async function activate(context) {
 		return vscode.workspace.fs.writeFile(fileUri, enc.encode(JSON.stringify(expressionsFiltered)));
 	}
 
-	async function load_expression_tokens(context) {
+	async function load_tokens(context) {
 		var dec = new TextDecoder("utf-8");
 		try {
-			var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "expr_tokens.json");
+			var fileUri = vscode.Uri.joinPath(context.globalStorageUri, "tokens.json");
 			await vscode.workspace.fs.stat(fileUri);
 			var value = await vscode.workspace.fs.readFile(fileUri)
 			var data = JSON.parse(dec.decode(value));
 			addToexpression_tokens(data);
 			return true
 		} catch (e) {
-			vscode.window.showInformationMessage('Could not load cache file.');
+			await vscode.window.showWarningMessage('Could not load cache file. It is recommended to update the documentation files because most of the Documentation is still under devellopment and may change from time to time.', 'Update Documentation')
+				.then(value => {
+					if (value == 'Update Documentation') {
+						updateDocumentation(false);
+					}
+				}
+
+				)
 			return false
 		}
 	}
@@ -227,40 +236,45 @@ async function activate(context) {
 			}
 
 			for (const item of dataObject[section]) {
-				var found = false 
+				var found = false
 
 				for (var i = 0; i < expression_tokens[section].length; i++) {
-					var item2 = expression_tokens[section][i]
-					if (item.hasOwnProperty('isFromFile')) {
-						if (item2['name'] == item['name'] && item2.hasOwnProperty('isFromFiles') ) {
-							if (item2['isFromFiles'].includes(item['isFromFile'])) {
-								if (force) {
-									var filelist = item2['isFromFiles']
-									expression_tokens[section][i] = item
-									expression_tokens[section][i]['isFromFiles'] = filelist
+					try {
+						var item2 = expression_tokens[section][i]
+						if (item.hasOwnProperty('isFromFile')) {
+							if (item2['name'] == item['name'] && item2.hasOwnProperty('isFromFiles')) {
+								if (item2['isFromFiles'].includes(item['isFromFile'])) {
+									if (force) {
+										var filelist = item2['isFromFiles']
+										expression_tokens[section][i] = item
+										expression_tokens[section][i]['isFromFiles'] = filelist
+									}
+									found = true
+									break;
+								} else {
+									if (force) {
+										var filelist = item2['isFromFiles']
+										expression_tokens[section][i] = item
+										expression_tokens[section][i]['isFromFiles'] = filelist
+									}
+									expression_tokens[section][i]['isFromFiles'].push(item['isFromFile'])
+									found = true
+									break;
 								}
-								found=true
-								break;
-							} else {
+							}
+						} else {
+							if (item2['name'] == item['name']) {
 								if (force) {
-									var filelist = item2['isFromFiles']
 									expression_tokens[section][i] = item
-									expression_tokens[section][i]['isFromFiles'] = filelist
 								}
-								expression_tokens[section][i]['isFromFiles'].push(item['isFromFile'])
 								found = true
-								break;
+								break
 							}
 						}
-					} else {
-						if (item2['name'] == item['name']) {
-							if (force) {
-								expression_tokens[section][i] = item
-							}
-							found = true
-							break
-						}
+					} catch (error) {
+						console.log("Error during addToExpressionTokens: " + error.message)
 					}
+
 				}
 
 
@@ -269,7 +283,7 @@ async function activate(context) {
 						item['isFromFiles'] = [item['isFromFile']]
 					}
 					expression_tokens[section].push(item);
-}
+				}
 			}
 
 		}
@@ -304,6 +318,8 @@ async function activate(context) {
 				// 		}
 				// 	}
 				// }
+				if (!element['name']) { continue }
+
 				var name = element['name'].toLowerCase();
 				if (regToApply) {
 					name = name.replace("\\(\\)$", '').replace(regToApply, '');
@@ -329,7 +345,7 @@ async function activate(context) {
 							var dec = new TextDecoder("utf-8");
 							var docu = dec.decode(await vscode.workspace.fs.readFile(uri))
 						} catch (e) {
-							var docu = 'Error while retrieving Documentation from Uri "' + uri.toString + "\n\n"
+							var docu = 'Error while retrieving Documentation from Uri "' + uri.toString + "\n  "
 							if (e instanceof Error) {
 								docu += e.message
 							} else {
@@ -395,7 +411,7 @@ async function activate(context) {
 		for (const [key, value] of Object.entries(expression_tokens)) {
 			for (let X = 0; X < expression_tokens[key].length; X++) {
 				const item = expression_tokens[key][X];
-				
+
 				if (item.hasOwnProperty('isFromFiles') && item['isFromFiles'].includes(path)) {
 					item['isFromFiles'] = item['isFromFiles'].filter(element => element !== path)
 					if (item['isFromFiles'].length == 0) {
@@ -420,12 +436,13 @@ async function activate(context) {
 				filenameTrimmed = '...' + filenameTrimmed.substring(filenameTrimmed.length - 20)
 			}
 
+			var doc = ''
+			var label = null
+
 			var dec = new TextDecoder("utf-8");
 			var txt = dec.decode(await vscode.workspace.fs.readFile(uri))
-			if (!txt) { return }
 
-			var label = ''
-			var doc = ''
+			if (!txt) { return }
 
 			// Check if name of code is specified in the file like (name,My function name) 
 			var nameArrayResult = txt.match(reg_commentName)
@@ -433,10 +450,17 @@ async function activate(context) {
 				label = nameArrayResult[1]
 			}
 
-			// use first continuous block of comments as Documentation
-			var docMatch = txt.match(reg_docFileArea)
-			if (docMatch) {
-				doc = docMatch[0].replace(';', "  \n")
+			if (uri.path.endsWith(".gcode")) {
+				// use first continuous block of comments as Documentation
+				var docMatch = txt.split("\n");
+				var docStart = false
+				for (const row of docMatch)
+					if (row.startsWith(';')) {
+						docStart = true
+						doc += row.replace(';', '') + "\n"
+					} else if (docStart) {
+						break;
+					}
 			}
 
 			// Detect tokens in Filename
@@ -446,28 +470,35 @@ async function activate(context) {
 				item = {
 					'name': match.groups['mcode'],
 					'insertText': match.groups['mcode'],
-					'label': match.groups['mcode'] + ' - ' + label,
 					'detail': label,
 					'isFromFile': uri.path
 				}
-				item['documentation'] = doc + "[" + filenameTrimmed + "](" + uri.toString() + ")"
-
+				
+				item['documentation'] = ''
+				if (label) {
+					item['documentation'] += '## ' + label + "\n" 
+				}
+				
+				item['documentation'] += doc + "[" + filenameTrimmed + "](" + uri.toString() + ")"
 				addToexpression_tokens(
 					{
 						"mcodes": [item]
 					}
-					, false)
+					, true)
 			}
 
 			// Check if file is macro or like o1244.gcode
 			var match = uri.path.match(reg_fileTypeMacro)
 			if (match && match.groups['macro']) {
 				item = {
-					'name': match.groups['mcode'],
-					'insertText': match.groups['mcode'],
-					'label': match.groups['mcode'] + ' - ' + label,
+					'name': match.groups['macro'],
+					'insertText': match.groups['macro'],
 					'detail': label,
 					'isFromFile': uri.path
+				}
+				item['documentation'] = ''
+				if (label) {
+					item['documentation'] += '## ' + label + "\n"
 				}
 				item['documentation'] = doc + "[" + filenameTrimmed + "](" + uri.toString() + ")"
 
@@ -475,15 +506,12 @@ async function activate(context) {
 					{
 						"macros": [item]
 					}
-					, false)
+					, true)
 			}
-
 
 			// Detect tokens in Files
 			// Read Parameters.txt file
 			var tokensFound = []
-
-			var isParametersFile = uri.path.match(reg_fileTypeParameters)
 			var myArray
 			while ((myArray = reg_token_globalParameter.exec(txt)) !== null) {
 				if (myArray['groups'] && myArray['groups']['token']) {
@@ -495,7 +523,7 @@ async function activate(context) {
 							'insertText': myArray['groups']['token'],
 							'detail': label,
 							'isFromFile': uri.path,
-							'documentation': "### " + item.name + "\n\n #### Global Parameter"
+							'documentation': "### " + myArray['groups']['token'] + "\n#### Global Parameter"
 						}
 
 						addToexpression_tokens(
@@ -514,8 +542,7 @@ async function activate(context) {
 	async function updateTokensFromWorkspace() {
 		var files = await vscode.workspace.findFiles("{**/*.txt,**/*.gcode}")
 		for (const file of files) {
-			const contents = await analyzeFile(file)
-			console.log(contents);
+			await analyzeFile(file)
 		}
 	}
 
@@ -661,7 +688,7 @@ async function activate(context) {
 				var dec = new TextDecoder("utf-8");
 				var docu = dec.decode(await vscode.workspace.fs.readFile(uri))
 			} catch (e) {
-				var docu = 'Error while retrieving Documentation from Uri "' + uri.toString + "\n\n"
+				var docu = 'Error while retrieving Documentation from Uri "' + uri.toString + "\n"
 				if (e instanceof Error) {
 					docu += e.message
 				} else {
@@ -702,24 +729,7 @@ async function activate(context) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('planetcnc-expression.update',
 			async function () {
-				await vscode.window.withProgress({
-					location: vscode.ProgressLocation.Notification,
-					title: "Searching for new Data",
-					cancellable: true
-				}, async (progress, token) => {
-					var updated = await updateTokens(false, progress, token)
-
-					if (updated > 0) {
-						await save_expression_tokens(context);
-						vscode.window.showInformationMessage("New data has been downloaded")
-					} else {
-						vscode.window.showInformationMessage("You are using the most recend definitions")
-					}
-
-					progress.report({ increment: 100 })
-				})
-
-				await downloadPendingDocu()
+				await updateDocumentation(false)
 			}
 		)
 	);
@@ -728,28 +738,46 @@ async function activate(context) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('planetcnc-expression.updateforced',
 			async function () {
-				await vscode.window.withProgress({
-					location: vscode.ProgressLocation.Notification,
-					title: "Searching for new Data (Download forced)",
-					cancellable: true
-				}, async (progress, token) => {
-
-					var updated = await updateTokens(true, progress, token)
-
-					if (updated > 0) {
-						await save_expression_tokens(context);
-						vscode.window.showInformationMessage("New data has been downloaded")
-					} else {
-						vscode.window.showInformationMessage("You are using the most recend definitions")
-					}
-
-					progress.report({ increment: 100 })
-				})
-
-				await downloadPendingDocu()
+				await updateDocumentation(true)
 			}
 		)
 	);
+
+	var updateRunning = false
+	async function updateDocumentation(forced) {
+		try {
+			if (updateRunning) {
+				vscode.window.showWarningMessage('Update is already running. Wait for it to complete before starting another one.')
+				return false
+			}
+
+			updateRunning = true
+
+			await vscode.window.withProgress({
+				location: vscode.ProgressLocation.Notification,
+				title: "Searching for new Data",
+				cancellable: true
+			}, async (progress, token) => {
+				var updated = await updateTokens(forced, progress, token)
+
+				if (updated > 0) {
+					await save_expression_tokens(context);
+					vscode.window.showInformationMessage("New data has been downloaded")
+				} else {
+					vscode.window.showInformationMessage("You are using the most recend definitions")
+				}
+
+				progress.report({ increment: 100 })
+			})
+
+			await downloadPendingDocu()
+
+		} catch (error) {
+
+		} finally {
+			updateRunning = false
+		}
+	}
 
 	// CompletionItemProvider planetcncexpr
 	context.subscriptions.push(

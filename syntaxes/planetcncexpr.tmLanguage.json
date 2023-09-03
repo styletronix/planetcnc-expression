@@ -8,15 +8,96 @@
 		},
 		{
 			"include": "#comments"
+		},
+		{
+			"include": "#cmdline"
 		}
 	],
 	"repository": {
+		"cmdlinekeyvalues": {
+			"patterns": [
+				{
+					"begin": "\\s+",
+					"end": "\\s+|$",
+					"name": "support.other",
+					"patterns": [
+						{
+							"include": "#strings2"
+						},
+						{
+							"begin": "(\\w+)(\\=)",
+							"beginCaptures": {
+								"1":{
+									"name":"support.type.property-name"
+								},
+								"2": {
+									"name": "support.type.property-name.less"
+								}
+							},
+							"end": "\\s+|$",
+							"patterns": [
+								{
+									"include": "#strings2"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		"cmdline": {
+			"patterns": [
+				{
+					"name": "entity.name.tag",
+					"begin": "^cmd:",
+					"beginCaptures": {
+						"0": {
+							"name": "markup.bold"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{
+							"include": "#cmdlinekeyvalues"
+						}
+					]
+				},
+				{
+					"name": "comment.block",
+					"begin": "(^expr:)",
+					"beginCaptures": {
+						"0": {
+							"name": "invalid"
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{
+							"include": "#cmdlinekeyvalues"
+						}
+					]
+				},
+				{
+					"name": "invalid",
+					"match": "^(-{3})"
+				},
+				{
+					"name": "invalid",
+					"match": "^(\\*{3})"
+				}
+			]
+		},
 		"sections": {
 			"patterns": [
 				{
-					"name": "meta",
-					"begin": "(?:^\\s*)#(Loop|Loop5|Loop15|Loop60|Loop300|OnInit|OnShutdown|OnStart|OnEnd|OnPause|OnStop|OnEStop|OnJog|OnWheel|OnCmd)\\s*$",
-					"end": "^\\s*(?=#|\\z)", 
+					"name": "entity.name.class",
+					"beginCaptures": {
+						"0": {
+							"name": "markup.heading"
+						}
+					},
+					"begin": "(?:^\\s*)#(\\w+)\\s*$",
+					"end": "^\\s*(?=#|\\z)",
 					"patterns": [
 						{
 							"include": "#any-nested"
@@ -24,9 +105,14 @@
 					]
 				},
 				{
-					"name": "meta.type.name",
+					"name": "markup.inserted",
 					"begin": "^\\s*(#\\w+)\\b\\s*$",
 					"end": "^\\s*(?=#|\\z)",
+					"beginCaptures": {
+						"0": {
+							"name": "strong"
+						}
+					},
 					"patterns": [
 						{
 							"include": "#any-nested"
@@ -48,8 +134,13 @@
 			"patterns": [
 				{
 					"name": "entity.name.function",
-					"begin": "(?i)\\b(if|for|exec|return|exists|notexists|isnum|nop|def|defnz|abs|sqrt|sqr|sin|cos|tan|asin|acos|atan|atan2|rad2deg|deg2rad|pow|exp|exp10|exp2|log|log10|log2|rand|inc|dec|min|max|round|roundup|floor|ceil|trunc|center|centerex|hex|bin|chr|sleep|datetime|year|month|day|hour|minute|second|millisec|rgb2hue|rgb2sat|rgb2lum|rubik|url|sha256|sha256_f|md5|md5_f|crc16|crc32|debug|print|clear|status|msg|beep|siren|sound_load|sound_unload|sound_play|sound_stop|sound_isplaying|towork|toworkxy|toworkuv|tomachine|tomachinexy|tomachineuv|mmtounit|unittomm|mmtosetunit|setunittomm|setunit|getparam|setparam|remparam|cmd|cmdlist|startfn|startcode|py|pythr|estop|start|stop|pause|out|outpwm|extout1|extout2|jog|usb|midi_noteOn|midi_noteOff|midi_ctrl|midi_prog|midiin_channel|midiin_prog|midiin_note|midiin_ctrl|pk_digital|pk_analog|cam_grab|cam_color|cam_rect|buffer_new|buffer_delete|buffer_printstring|buffer_printdata|buffer_setstring|buffer_setdata|buffer_setdata16|buffer_setdata32|buffer_crc16|buffer_crc32|serial_list|serial_info|serial_open|serial_config|serial_close|serial_write|serial_writedata|serial_writebuffer|serial_read|serial_readdata|serial_readbuffer|not|and|or|xor|nand|nor|xnor|shl|shr|lnot|land|lor|lxor|lnand|lnor|lxnor|eq|ne|gt|lt|ge|le)\\b\\s*\\(",
+					"begin": "(?i)\\b(\\w+)\\b\\s*\\(",
 					"end": "\\s*\\)",
+					"beginCaptures": {
+						"0": {
+							"name": "keyword.operator.expression"
+						}
+					},
 					"patterns": [
 						{
 							"include": "#functions"
@@ -123,6 +214,17 @@
 				{
 					"name": "string.quoted.single",
 					"match": "[^']*"
+				}
+			]
+		},
+		"strings2": {
+			"name": "string.quoted",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "string.quoted.double",
+					"match": "[^\"]*"
 				}
 			]
 		},
